@@ -1,6 +1,8 @@
 package drone_info
 
 const (
+	// DroneTimeFormatDefault
+	// default time format for Stage.StartedTime and Stage.FinishedTime
 	DroneTimeFormatDefault = "2006-01-02-03-04-05"
 
 	// EnvDroneCommitAuthorName
