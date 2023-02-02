@@ -7,6 +7,32 @@
 
 - this tools use for bind drone env for [https://plugins.drone.io/](https://plugins.drone.io/)
 
+## usage
+
+```go
+package main
+
+import (
+	"github.com/sinlov/drone-info-tools/drone_urfave_cli_v2"
+	"github.com/urfave/cli/v2"
+)
+
+func main() {
+	app := cli.NewApp()
+
+	droneFlag := drone_urfave_cli_v2.DroneInfoUrfaveCliFlag()
+	flags := drone_urfave_cli_v2.UrfaveCliAppendCliFlag(droneFlag, pluginFlag())
+
+	app.Flags = flags
+}
+
+// action
+// do cli Action before flag.
+func action(c *cli.Context) error {
+	drone := drone_urfave_cli_v2.UrfaveCliBindDroneInfo(c)
+}
+```
+
 ## depends
 
 in go mod project
