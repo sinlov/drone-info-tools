@@ -37,4 +37,29 @@ func Test_RenderTrim(t *testing.T) {
 	assert.Equal(t, `{
 	"Foo": "bar"
 }`, trim2)
+
+	var successCheckTpl = `
+{{#success Status }}✅{{/success}}
+{{#failure Status}}❌{{/failure}}
+`
+	sModeSucc := struct {
+		Status string
+	}{
+		Status: "success",
+	}
+	trim3, err := template.RenderTrim(successCheckTpl, sModeSucc)
+	if err != nil {
+		t.Fatalf("RenderTrim error %v", err)
+	}
+	sModeFail := struct {
+		Status string
+	}{
+		Status: "failure",
+	}
+	assert.Equal(t, `✅`, trim3)
+	trim4, err := template.RenderTrim(successCheckTpl, sModeFail)
+	if err != nil {
+		t.Fatalf("RenderTrim error %v", err)
+	}
+	assert.Equal(t, `❌`, trim4)
 }
