@@ -56,7 +56,7 @@ func main()  {
 
 ## usage
 
-- `only once template.RegisterSettings` like file `init.go`
+- `only once template.RegisterSettings` like file `main.go`
 
 ```go
 package main
@@ -65,7 +65,7 @@ import (
 	"github.com/sinlov/drone-info-tools/template"
 )
 
-func init() {
+func main() {
   template.RegisterSettings(template.DefaultFunctions)
 }
 ```
