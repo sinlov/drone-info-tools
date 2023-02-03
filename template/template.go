@@ -24,6 +24,26 @@ import (
 	"github.com/aymerick/raymond"
 )
 
+const (
+	RenderStatusShow = "success"
+	RenderStatusHide = "failure"
+)
+
+var (
+	// renderStatusSupport
+	renderStatusSupport []string
+)
+
+func RenderStatusSupport() []string {
+	if renderStatusSupport == nil {
+		renderStatusSupport = []string{
+			RenderStatusShow,
+			RenderStatusHide,
+		}
+	}
+	return renderStatusSupport
+}
+
 // Render parses and executes a template, returning the results in string
 // format. Trailing or leading spaces or new-lines are not getting truncated. It
 // is able to read templates from remote paths, local files or directly from the

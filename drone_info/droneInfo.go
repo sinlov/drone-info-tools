@@ -1,6 +1,11 @@
 package drone_info
 
 const (
+	DroneBuildStatusSuccess = "success"
+	DroneBuildStatusFailure = "failure"
+	DroneBuildStatusError   = "error"
+	DroneBuildStatusKilled  = "killed"
+
 	// DroneTimeFormatDefault
 	// default time format for Stage.StartedTime and Stage.FinishedTime
 	DroneTimeFormatDefault = "2006-01-02-03-04-05"
@@ -125,6 +130,24 @@ const (
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-system-proto/
 	EnvDroneSystemProto = "DRONE_SYSTEM_PROTO"
 )
+
+var (
+	// droneBuildStatusStatusOptSupport
+	droneBuildStatusStatusOptSupport []string
+)
+
+func DroneBuildStatusStatusOptSupport() []string {
+	if droneBuildStatusStatusOptSupport == nil {
+		droneBuildStatusStatusOptSupport = []string{
+			"",
+			DroneBuildStatusSuccess,
+			DroneBuildStatusFailure,
+			DroneBuildStatusError,
+			DroneBuildStatusKilled,
+		}
+	}
+	return droneBuildStatusStatusOptSupport
+}
 
 type (
 	// Repo repo base info
