@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/sinlov/drone-info-tools/compare/v1.2.0...v1.3.0) (2023-02-03)
+
+
+### Features
+
+* add drone_info.DroneBuildStatusStatusOptSupport() and template.RenderStatusSupport() ([1af8c6a](https://github.com/sinlov/drone-info-tools/commit/1af8c6ae49d4c7e3a2e97c6a286ec0325355f864))
+
 ## [1.2.0](https://github.com/sinlov/drone-info-tools/compare/v1.1.0...v1.2.0) (2023-02-03)
 
 
