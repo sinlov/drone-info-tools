@@ -13,13 +13,20 @@
 package main
 
 import (
+	_ "embed"
 	"github.com/sinlov/drone-info-tools/drone_urfave_cli_v2"
+	"github.com/sinlov/drone-info-tools/pkgJson"
 	"github.com/urfave/cli/v2"
 )
 
-func main() {
-	app := cli.NewApp()
+//go:embed package.json
+var packageJson string
 
+func main() {
+	pkgJson.InitPkgJsonContent(packageJson)
+	
+	app := cli.NewApp()
+	app.Version = pkgJson.GetPackageJsonVersionGoStyle()
 	droneFlag := drone_urfave_cli_v2.DroneInfoUrfaveCliFlag()
 	flags := drone_urfave_cli_v2.UrfaveCliAppendCliFlag(droneFlag, pluginFlag())
 

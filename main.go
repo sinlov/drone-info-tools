@@ -1,18 +1,26 @@
 package main
 
 import (
+	_ "embed"
 	"flag"
 	"github.com/sinlov/drone-info-tools/drone_urfave_cli_v2"
+	"github.com/sinlov/drone-info-tools/pkgJson"
 	"log"
 )
 
 const (
-	Version = "v1.3.0"
+	Name = "drone-info-tools"
 )
 
-var cliVersion = flag.String("version", Version, "show version of this cli")
+//go:embed package.json
+var packageJson string
+
+var cliVersion *string
 
 func main() {
+	pkgJson.InitPkgJsonContent(packageJson)
+	cliVersion = flag.String("version", pkgJson.GetPackageJsonVersionGoStyle(), "show version of this cli")
+
 	flag.Parse()
 	log.Printf("=> now version %v", *cliVersion)
 	drone_urfave_cli_v2.DroneInfoUrfaveCliFlag()
