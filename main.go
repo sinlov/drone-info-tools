@@ -6,7 +6,11 @@ import (
 	"log"
 )
 
-var cliVersion = flag.String("version", "v1.0.1", "show version of this cli")
+const (
+	Version = "v1.1.0"
+)
+
+var cliVersion = flag.String("version", Version, "show version of this cli")
 
 func main() {
 	flag.Parse()
