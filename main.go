@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	Version = "v1.1.0"
+	Version = "v1.2.0"
 )
 
 var cliVersion = flag.String("version", Version, "show version of this cli")
