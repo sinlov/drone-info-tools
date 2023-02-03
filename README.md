@@ -33,6 +33,43 @@ func action(c *cli.Context) error {
 }
 ```
 
+### tools
+
+```go
+package main
+
+import (
+	tools "github.com/sinlov/drone-info-tools/tools/str_tools"
+)
+
+func main()  {
+	tools.StrInArr(foo, bar)
+}
+```
+
+### template
+
+```
+	github.com/Masterminds/sprig/v3 v3.1.0
+	github.com/aymerick/raymond v2.0.2+incompatible
+```
+
+## usage
+
+- `only once template.RegisterSettings` like file `init.go`
+
+```go
+package main
+
+import (
+	"github.com/sinlov/drone-info-tools/template"
+)
+
+func init() {
+  template.RegisterSettings(template.DefaultFunctions)
+}
+```
+
 ## depends
 
 in go mod project
