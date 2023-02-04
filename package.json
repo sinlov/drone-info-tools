@@ -1,6 +1,6 @@
 {
   "name": "drone-info-tools",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "template of golang base",
   "main": "index.js",
   "directories": {

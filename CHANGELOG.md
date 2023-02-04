@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/sinlov/drone-info-tools/compare/v1.4.1...v1.5.0) (2023-02-04)
+
+
+### Features
+
+* add Path2WebPath to let local path to web path ([8faaf06](https://github.com/sinlov/drone-info-tools/commit/8faaf06a7e76655a76fda51adfe05e5d373fbf98))
+* make dist verison to v1.5.0 ([a168d99](https://github.com/sinlov/drone-info-tools/commit/a168d996dd40e54628c2e59f03b874df90542541))
+
 ### [1.4.1](https://github.com/sinlov/drone-info-tools/compare/v1.4.0...v1.4.1) (2023-02-03)
 
 ## [1.4.0](https://github.com/sinlov/drone-info-tools/compare/v1.3.0...v1.4.0) (2023-02-03)
