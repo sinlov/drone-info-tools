@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/sinlov/drone-info-tools/compare/v1.5.0...v1.6.0) (2023-02-08)
+
+
+### Features
+
+* change to z-MakefileUtils to reduce the impact on the project directory ([5697924](https://github.com/sinlov/drone-info-tools/commit/5697924b4a8c7b2f7598ded5baa2f1313700128b))
+
 ## [1.5.0](https://github.com/sinlov/drone-info-tools/compare/v1.4.1...v1.5.0) (2023-02-04)
 
 
