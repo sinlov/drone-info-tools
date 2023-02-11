@@ -38,6 +38,10 @@ const (
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-repo/
 	EnvDroneRepo     = "DRONE_REPO"
 	EnvDroneRepoName = "DRONE_REPO_NAME"
+	// EnvDroneRepoLink
+	// by env:DRONE_REPO_LINK
+	// @doc https://docs.drone.io/pipeline/environment/reference/drone-repo-link/
+	EnvDroneRepoLink = "DRONE_REPO_LINK"
 	// EnvDroneRepoNamespace
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-repo-namespace/
 	EnvDroneRepoNamespace = "DRONE_REPO_NAMESPACE"
@@ -161,6 +165,10 @@ func DroneBuildStatusStatusOptSupport() []string {
 type (
 	// Repo repo base info
 	Repo struct {
+		// Link
+		// by env:DRONE_REPO_LINK
+		// @doc https://docs.drone.io/pipeline/environment/reference/drone-repo-link/
+		Link string
 		// ShortName
 		// by env:DRONE_REPO_NAME
 		// @doc https://docs.drone.io/pipeline/environment/reference/drone-repo-name/

@@ -18,6 +18,11 @@ func DroneInfoUrfaveCliFlag() []cli.Flag {
 			EnvVars: []string{drone_info.EnvDroneRepoName},
 		},
 		&cli.StringFlag{
+			Name:    "repo.link",
+			Usage:   "Provides the repository link for the current running build.",
+			EnvVars: []string{drone_info.EnvDroneRepoLink},
+		},
+		&cli.StringFlag{
 			Name:    "repo.group",
 			Usage:   "providers the group of the repository",
 			EnvVars: []string{drone_info.EnvDroneRepoNamespace},
@@ -264,6 +269,7 @@ func UrfaveCliBindDroneInfo(c *cli.Context) drone_info.Drone {
 	var drone = drone_info.Drone{
 		//  repo info
 		Repo: drone_info.Repo{
+			Link:      c.String("repo.link"),
 			ShortName: c.String("repo.name"),
 			GroupName: c.String("repo.group"),
 			FullName:  c.String("repo.full.name"),

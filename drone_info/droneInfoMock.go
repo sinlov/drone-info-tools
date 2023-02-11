@@ -111,12 +111,13 @@ func MockDroneInfoRefs(status string, refs string) (*Drone, error) {
 	var drone = Drone{
 		//  repo info
 		Repo: Repo{
+			Link:      repoUrl,
 			ShortName: repoName,
 			GroupName: mockEnvDroneRepoOwner,
 			FullName:  fmt.Sprintf("%s/%s", owner, repoName),
 			OwnerName: mockEnvDroneRepoOwner,
 			Scm:       mockEnvDroneRepoScm,
-			RemoteURL: repoUrl,
+			RemoteURL: repoHttpUrl,
 			HttpUrl:   repoHttpUrl,
 			SshUrl:    repoSshUrl,
 			Host:      repoHost,
@@ -212,10 +213,11 @@ func MockDroneInfoEnvFull(debug bool) {
 	droneBaseUrl := mockEnvDroneUrlBase
 	buildNumber := mockEnvDroneBuildNumber
 
+	setEnvStr(EnvDroneRepoLink, repoUrl)
 	setEnvStr(EnvDroneRepo, fmt.Sprintf("%s/%s", owner, repoName))
 	setEnvStr(EnvDroneRepoName, repoName)
 	setEnvStr(EnvDroneRepoNamespace, owner)
-	setEnvStr(EnvDroneRemoteUrl, repoUrl)
+	setEnvStr(EnvDroneRemoteUrl, repoHttpUrl)
 	setEnvStr(EnvDroneRepoOwner, owner)
 	setEnvStr(EnvDroneGitHttpUrl, repoHttpUrl)
 	setEnvStr(EnvDroneGitSshUrl, repoSshUrl)
