@@ -72,8 +72,13 @@ func DroneInfoUrfaveCliFlag() []cli.Flag {
 		},
 		&cli.StringFlag{
 			Name:    "build.tag",
-			Usage:   "build tag",
+			Usage:   "Provides the tag for the current running build. This value is only populated for tag events and promotion events that are derived from tags.",
 			EnvVars: []string{drone_info.EnvDroneTag},
+		},
+		&cli.StringFlag{
+			Name:    "build.branch",
+			Usage:   "Provides the target branch for the push or pull request. This value may be empty for tag events.",
+			EnvVars: []string{drone_info.EnvDroneBranch},
 		},
 		&cli.StringFlag{
 			Name:    "build.target_branch",
@@ -276,6 +281,7 @@ func UrfaveCliBindDroneInfo(c *cli.Context) drone_info.Drone {
 			Status:       c.String("build.status"),
 			Number:       c.Uint64("build.number"),
 			Tag:          c.String("build.tag"),
+			Branch:       c.String("build.branch"),
 			TargetBranch: c.String("build.target_branch"),
 			Link:         c.String("build.link"),
 			Event:        c.String("build.event"),

@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -16,7 +17,7 @@ const (
 	mockEnvDroneRepo              = "drone-file-browser-plugin"
 	mockEnvDroneCommitAuthorEmail = "sinlovgmppt@gmail.com"
 	mockEnvDroneRepoOwner         = "sinlov"
-	mockEnvDroneCommitBranch      = "main"
+	mockEnvDroneBranch            = "main"
 	mockEnvDroneRemoteUrlBase     = "https://github.com"
 
 	mockEnvDroneSystemVersion  = "1.0.0"
@@ -53,7 +54,32 @@ const (
 	mockEnvFailedSteps  = "backend,frontend"
 )
 
+// MockDroneInfo
+// status DroneBuildStatusSuccess DroneBuildStatusFailure
+// this mock will use mockEnvDroneBranch as heads by MockDroneInfoRefs
 func MockDroneInfo(status string) *Drone {
+	droneInfoRefs, _ := MockDroneInfoRefs(status, fmt.Sprintf("refs/heads/%s", mockEnvDroneBranch))
+	return droneInfoRefs
+}
+
+// MockDroneInfoRefs
+// status DroneBuildStatusSuccess DroneBuildStatusFailure
+// refs by: git show-ref --head --dereference
+// @doc https://git-scm.com/docs/git-show-ref
+// like refs/heads/master refs/remotes/* refs/pull/* refs/tags/v1.0.0
+func MockDroneInfoRefs(status string, refs string) (*Drone, error) {
+
+	if refs == "" {
+		return nil, fmt.Errorf("refs not support nil")
+	}
+	if !strings.HasPrefix(refs, "refs/") {
+		return nil, fmt.Errorf("refs not has prefix refs/ , now is: %s", refs)
+	}
+	refsPath := strings.Replace(refs, "refs/", "", -1)
+	refsSplit := strings.SplitN(refsPath, "/", 2)
+	if len(refsSplit) < 2 {
+		return nil, fmt.Errorf("refs parase error, now is: %s", refs)
+	}
 
 	if status == "" {
 		status = mockEnvDroneBuildStatusSuccess
@@ -79,7 +105,6 @@ func MockDroneInfo(status string) *Drone {
 	stageFinishedT := mockEnvDroneStageFinished
 	stageFinishedTime := time.Unix(int64(stageStartT), 0).Format(DroneTimeFormatDefault)
 	commitSHA := mockEnvDroneCommitSha
-	branch := mockEnvDroneCommitBranch
 	droneBaseUrl := mockEnvDroneUrlBase
 	buildNumber := mockEnvDroneBuildNumber
 
@@ -115,10 +140,9 @@ func MockDroneInfo(status string) *Drone {
 		},
 		Commit: Commit{
 			Link:    fmt.Sprintf("%s/commit/%s", repoHttpUrl, commitSHA),
-			Branch:  branch,
 			Message: mockEnvDroneCommitMessage,
 			Sha:     commitSHA,
-			Ref:     fmt.Sprintf("refs/heads/%s", branch),
+			Ref:     refs,
 			Author: CommitAuthor{
 				Username: owner,
 				Email:    email,
@@ -147,7 +171,28 @@ func MockDroneInfo(status string) *Drone {
 		},
 	}
 
-	return &drone
+	refsType := refsSplit[0]
+	refsContent := refsSplit[1]
+	switch refsType {
+	case "tags":
+		drone.Build.Tag = strings.Replace(refsContent, "v", "", 1)
+		drone.Commit.Branch = ""
+		drone.Build.Branch = ""
+	case "heads":
+		fallthrough
+	case "remotes":
+		fallthrough
+	case "pull":
+		drone.Commit.Branch = refsContent
+		drone.Build.Branch = refsContent
+	default:
+		return nil, fmt.Errorf("not support refsType by refs: %s", refs)
+
+	}
+
+	//branch := mockEnvDroneCommitBranch
+
+	return &drone, nil
 }
 
 func MockDroneInfoEnvFull(debug bool) {
@@ -163,7 +208,7 @@ func MockDroneInfoEnvFull(debug bool) {
 	repoSshUrl := fmt.Sprintf("git@%s:%s/%s.git", owner, repoName, "github.com")
 
 	commitSHA := mockEnvDroneCommitSha
-	branch := mockEnvDroneCommitBranch
+	branch := mockEnvDroneBranch
 	droneBaseUrl := mockEnvDroneUrlBase
 	buildNumber := mockEnvDroneBuildNumber
 
@@ -192,6 +237,7 @@ func MockDroneInfoEnvFull(debug bool) {
 	setEnvStr(EnvDroneCommitAuthorAvatar, "")
 	setEnvStr(EnvDroneCommitAuthorEmail, email)
 	setEnvStr(EnvDroneCommitLink, fmt.Sprintf("%s/commit/%s", repoUrl, commitSHA))
+	setEnvStr(EnvDroneBranch, branch)
 	setEnvStr(EnvDroneCommitBranch, branch)
 	setEnvStr(EnvDroneCommitMessage, mockEnvDroneCommitMessage)
 	setEnvStr(EnvDroneCommitSha, commitSHA)

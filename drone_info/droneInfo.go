@@ -65,7 +65,16 @@ const (
 	EnvDroneBuildStarted   = "DRONE_BUILD_STARTED"
 	EnvDroneBuildFinished  = "DRONE_BUILD_FINISHED"
 
+	// EnvDroneTag
+	// by env: DRONE_TAG
+	// Provides the tag for the current running build. This value is only populated for tag events and promotion events that are derived from tags.
+	// @doc https://docs.drone.io/pipeline/environment/reference/drone-tag/
 	EnvDroneTag = "DRONE_TAG"
+	// EnvDroneBranch
+	// by env: DRONE_BRANCH
+	// Provides the target branch for the push or pull request. This value may be empty for tag events.
+	// @doc https://docs.drone.io/pipeline/environment/reference/drone-branch/
+	EnvDroneBranch = "DRONE_BRANCH"
 	// EnvDroneTargetBranch
 	// This environment variable can be used in conjunction with the source branch variable to get the pull request base and head branch.
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-target-branch/
@@ -203,7 +212,16 @@ type (
 		WorkSpace string
 		Status    string //  providers the current build status
 		Number    uint64 //  providers the current build number
-		Tag       string //  providers the current build tag
+		// Branch
+		// by env: DRONE_TAG
+		// Provides the tag for the current running build. This value is only populated for tag events and promotion events that are derived from tags.
+		// @doc https://docs.drone.io/pipeline/environment/reference/drone-tag/
+		Tag string
+		// Branch
+		// by env: DRONE_BRANCH
+		// Provides the target branch for the push or pull request. This value may be empty for tag events.
+		// @doc https://docs.drone.io/pipeline/environment/reference/drone-branch/
+		Branch string
 		// TargetBranch
 		// by env:DRONE_TARGET_BRANCH
 		// This environment variable can be used in conjunction with the source branch variable to get the pull request base and head branch.
