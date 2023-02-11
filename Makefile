@@ -1,7 +1,7 @@
 .PHONY: test check clean build dist all
 #TOP_DIR := $(shell pwd)
 # each tag change this
-ENV_DIST_VERSION := v1.7.0
+ENV_DIST_VERSION := v1.8.0
 ifneq ($(strip $(ENV_CI_DIST_VERSION)),)
     ENV_DIST_VERSION=${ENV_CI_DIST_VERSION}
 endif
