@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/sinlov/drone-info-tools/compare/v1.6.0...v1.7.0) (2023-02-11)
+
+
+### Features
+
+* add Drone.Build.Branch and function MockDroneInfoRefs to mock tags ([b9fc06a](https://github.com/sinlov/drone-info-tools/commit/b9fc06a7ba484e555af544f4d21ccae3b832a7d5))
+
 ## [1.6.0](https://github.com/sinlov/drone-info-tools/compare/v1.5.0...v1.6.0) (2023-02-08)
 
 
