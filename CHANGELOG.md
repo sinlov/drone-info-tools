@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/sinlov/drone-info-tools/compare/v1.7.0...v1.8.0) (2023-02-11)
+
+
+### Features
+
+* add Repo.Link and get from Dron and mock test case ([c70a293](https://github.com/sinlov/drone-info-tools/commit/c70a2932bf6aa82aac3675f189a5042c3adff13b))
+* mark v1.8.0 ([69bf5a7](https://github.com/sinlov/drone-info-tools/commit/69bf5a7c15e079d854c33b94ace187fd91de2e28))
+
 ## [1.7.0](https://github.com/sinlov/drone-info-tools/compare/v1.6.0...v1.7.0) (2023-02-11)
 
 
