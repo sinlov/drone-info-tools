@@ -63,12 +63,28 @@ func MockDroneInfo(status string) *Drone {
 }
 
 // MockDroneInfoRefs
+// host use mockEnvDroneSystemHost
 // status DroneBuildStatusSuccess DroneBuildStatusFailure
 // refs by: git show-ref --head --dereference
 // @doc https://git-scm.com/docs/git-show-ref
 // like refs/heads/master refs/remotes/* refs/pull/* refs/tags/v1.0.0
 func MockDroneInfoRefs(status string, refs string) (*Drone, error) {
+	return MockDroneInfoDroneSystemRefs(mockEnvDroneSystemProto, mockEnvDroneSystemHost, mockEnvDroneSystemHostName, status, refs)
+}
 
+// MockDroneInfoDroneSystemRefs
+// droneHost like drone.xxx.com:80
+// droneHostName like drone.xxx.com
+// status DroneBuildStatusSuccess DroneBuildStatusFailure
+// refs by: git show-ref --head --dereference
+// @doc https://git-scm.com/docs/git-show-ref
+// like refs/heads/master refs/remotes/* refs/pull/* refs/tags/v1.0.0
+func MockDroneInfoDroneSystemRefs(
+	droneProto,
+	droneHost,
+	droneHostName,
+	status string,
+	refs string) (*Drone, error) {
 	if refs == "" {
 		return nil, fmt.Errorf("refs not support nil")
 	}
@@ -105,7 +121,7 @@ func MockDroneInfoRefs(status string, refs string) (*Drone, error) {
 	stageFinishedT := mockEnvDroneStageFinished
 	stageFinishedTime := time.Unix(int64(stageStartT), 0).Format(DroneTimeFormatDefault)
 	commitSHA := mockEnvDroneCommitSha
-	droneBaseUrl := mockEnvDroneUrlBase
+	droneBaseUrl := fmt.Sprintf("%s://%s", droneProto, droneHost)
 	buildNumber := mockEnvDroneBuildNumber
 
 	var drone = Drone{
@@ -166,9 +182,9 @@ func MockDroneInfoRefs(status string, refs string) (*Drone, error) {
 		},
 		DroneSystem: DroneSystem{
 			Version:  mockEnvDroneSystemVersion,
-			Host:     mockEnvDroneSystemHost,
-			HostName: mockEnvDroneSystemHostName,
-			Proto:    mockEnvDroneSystemProto,
+			Host:     droneHost,
+			HostName: droneHostName,
+			Proto:    droneProto,
 		},
 	}
 
