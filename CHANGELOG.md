@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.0](https://github.com/sinlov/drone-info-tools/compare/v1.8.0...v1.9.0) (2023-06-13)
+
+
+### Features
+
+* add drone_info.MockDroneInfoDroneSystemRefs can mock drone system info ([eaa10e2](https://github.com/sinlov/drone-info-tools/commit/eaa10e23cf4cfb963dbe9fc6c9e353ad8e5317a2))
+
 ## [1.8.0](https://github.com/sinlov/drone-info-tools/compare/v1.7.0...v1.8.0) (2023-02-11)
 
 
