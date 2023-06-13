@@ -1,7 +1,7 @@
 {
   "name": "drone-info-tools",
   "version": "1.8.0",
-  "description": "template of golang base",
+  "description": "drone info lib and can mock data",
   "main": "index.js",
   "directories": {
     "doc": "doc"
