@@ -10,6 +10,10 @@ const (
 	// default time format for Stage.StartedTime and Stage.FinishedTime
 	DroneTimeFormatDefault = "2006-01-02-03-04-05"
 
+	// EnvKeyPluginDebug
+	// Provides the plugin debug flag. This value is true when the plugin is open debug mode
+	EnvKeyPluginDebug = "PLUGIN_DEBUG"
+
 	// EnvDroneCommitAuthorName
 	// Provides the commit author name for the current running build. Note this is a user-defined value and may be empty or inaccurate.
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-commit-author-name/

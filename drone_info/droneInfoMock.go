@@ -213,7 +213,7 @@ func MockDroneInfoDroneSystemRefs(
 }
 
 func MockDroneInfoEnvFull(debug bool) {
-	setEnvBool("PLUGIN_DEBUG", debug)
+	setEnvBool(EnvKeyPluginDebug, debug)
 
 	workspace, _ := getCurrentFolderPath()
 
@@ -279,7 +279,7 @@ func MockDroneInfoEnvFull(debug bool) {
 }
 
 func MockEnvDebugPrint() {
-	envDebug, find := os.LookupEnv("PLUGIN_DEBUG")
+	envDebug, find := os.LookupEnv(EnvKeyPluginDebug)
 	if find && envDebug == "true" {
 		for _, e := range os.Environ() {
 			log.Println(e)
