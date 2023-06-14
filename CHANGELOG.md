@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0](https://github.com/sinlov/drone-info-tools/compare/v1.9.0...v1.10.0) (2023-06-14)
+
+
+### Features
+
+* add env key drone_info.EnvKeyPluginDebug ([cffa4bc](https://github.com/sinlov/drone-info-tools/commit/cffa4bc11439a71972e6489c13d9f493e85720b7))
+
 ## [1.9.0](https://github.com/sinlov/drone-info-tools/compare/v1.8.0...v1.9.0) (2023-06-13)
 
 
