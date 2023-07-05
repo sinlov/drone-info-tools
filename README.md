@@ -1,11 +1,25 @@
-[![go-ubuntu](https://github.com/sinlov/drone-info-tools/workflows/go-ubuntu/badge.svg?branch=main)](https://github.com/sinlov/drone-info-tools/actions)
-[![GoDoc](https://godoc.org/github.com/sinlov/drone-info-tools?status.png)](https://godoc.org/github.com/sinlov/drone-info-tools/)
-[![GoReportCard](https://goreportcard.com/badge/github.com/sinlov/drone-info-tools)](https://goreportcard.com/report/github.com/sinlov/drone-info-tools)
+[![golang-ci](https://github.com/sinlov/drone-info-tools/actions/workflows/golang-ci.yml/badge.svg)](https://github.com/sinlov/drone-info-tools/actions/workflows/golang-ci.yml)
+[![go mod version](https://img.shields.io/github/go-mod/go-version/sinlov/drone-info-tools?label=go.mod)](https://github.com/sinlov/drone-info-tools)
+[![GoDoc](https://godoc.org/github.com/sinlov/drone-info-tools?status.png)](https://godoc.org/github.com/sinlov/drone-info-tools)
+[![goreportcard](https://goreportcard.com/badge/github.com/sinlov/drone-info-tools)](https://goreportcard.com/report/github.com/sinlov/drone-info-tools)
+[![GitHub license](https://img.shields.io/github/license/sinlov/drone-info-tools)](https://github.com/sinlov/drone-info-tools)
 [![codecov](https://codecov.io/gh/sinlov/drone-info-tools/branch/main/graph/badge.svg)](https://codecov.io/gh/sinlov/drone-info-tools)
+[![GitHub latest SemVer tag)](https://img.shields.io/github/v/tag/sinlov/drone-info-tools)](https://github.com/sinlov/drone-info-tools/tags)
 
 ## for what
 
 - this tools use for bind drone env for [https://plugins.drone.io/](https://plugins.drone.io/)
+
+## Contributing
+
+[![Contributor Covenant](https://img.shields.io/badge/contributor%20covenant-v1.4-ff69b4.svg)](.github/CONTRIBUTING_DOC/CODE_OF_CONDUCT.md)
+[![GitHub contributors](https://img.shields.io/github/contributors/sinlov/drone-info-tools)](https://github.com/sinlov/drone-info-tools/graphs/contributors)
+
+We welcome community contributions to this project.
+
+Please read [Contributor Guide](.github/CONTRIBUTING_DOC/CONTRIBUTING.md) for more information on how to get started.
+
+请阅读有关 [贡献者指南](.github/CONTRIBUTING_DOC/zh-CN/CONTRIBUTING.md) 以获取更多如何入门的信息
 
 ## usage
 
@@ -15,6 +29,7 @@ package main
 import (
 	_ "embed"
 	"github.com/sinlov/drone-info-tools/drone_urfave_cli_v2"
+	resource "github.com/sinlov/drone-info-tools"
 	"github.com/sinlov/drone-info-tools/pkgJson"
 	"github.com/urfave/cli/v2"
 )
@@ -23,7 +38,7 @@ import (
 var packageJson string
 
 func main() {
-	pkgJson.InitPkgJsonContent(packageJson)
+	pkgJson.InitPkgJsonContent(resource.PackageJson)
 	
 	app := cli.NewApp()
 	app.Version = pkgJson.GetPackageJsonVersionGoStyle()

@@ -1,12 +1,14 @@
+## for golang test task
+# include z-MakefileUtils/MakeGoDist.mk
 # this file must use as base Makefile job must has variate
 #
 # must as some include MakeDistTools.mk
 #
 # windows use must install tools
-# https://scoop.sh/#/apps?q=gow&s=0&d=1&o=true
-# scoop install gow
 # https://scoop.sh/#/apps?q=busybox&s=0&d=1&o=true
-# scoop install shasum
+# scoop install main/busybox
+# https://scoop.sh/#/apps?q=shasum&s=0&d=1&o=true
+# scoop install main/shasum
 #
 # ENV_ROOT_BUILD_BIN_NAME for set go binary file name
 # ENV_DIST_VERSION for set dist version name
@@ -16,11 +18,6 @@
 #
 # task: [ cleanAllDist ] can clean dist
 # task: [ helpDist distEnv ] can show more info
-
-ENV_SERVER_TEST_SSH_ALIAS=aliyun-ecs
-ENV_SERVER_TEST_FOLDER=/home/work/Document/
-ENV_SERVER_REPO_SSH_ALIAS=golang-project-temple-base
-ENV_SERVER_REPO_FOLDER=/home/ubuntu/$(ROOT_NAME)
 
 ENV_INFO_DIST_BIN_NAME=${ENV_ROOT_BUILD_BIN_NAME}
 ENV_INFO_DIST_VERSION=${ENV_DIST_VERSION}
@@ -42,7 +39,8 @@ define dist_tar_with_source
 	@echo "      ENV_INFO_DIST_MARK    : ${ENV_INFO_DIST_MARK}"
 	@echo ""
 	$(warning if cp source can change here cp tar undper $(strip ${1}))
-	cp '${ENV_ROOT_MANIFEST_PKG_JSON}' '$(strip ${1})'
+	$(info change this - cp '${ENV_ROOT_MANIFEST_PKG_JSON}' '$(strip ${1})')
+	$(info change this - cp -R 'doc/' '$(strip ${1})/doc')
 	cp -R 'doc/' '$(strip ${1})/doc'
 	@echo "-> cp source finish"
 
@@ -54,7 +52,7 @@ endef
 
 define dist_tar_with_windows_source
 	@echo "=> start $(0)"
-	@echo " want tar source folder     : $(strip ${1})"
+	@echo " want tar source folder     : $(subst /,\,$(strip ${1}))"
 	@echo "      tar file abs folder   : $(strip ${2})"
 	@echo "      tar file env mark     : $(strip ${3})"
 	@echo "      tar file full path    : $(strip ${2})${ENV_INFO_DIST_BIN_NAME}-$(strip ${3})-${ENV_INFO_DIST_VERSION}${ENV_INFO_DIST_MARK}.tar.gz"
@@ -62,7 +60,8 @@ define dist_tar_with_windows_source
 	@echo "      ENV_INFO_DIST_MARK    : ${ENV_INFO_DIST_MARK}"
 	@echo ""
 	$(warning if cp source can change here cp tar undper $(strip ${1}))
-	cp '${ENV_ROOT_MANIFEST_PKG_JSON}' '$(strip ${1})'
+	$(info change this - cp '${ENV_ROOT_MANIFEST_PKG_JSON}' '$(strip ${1})')
+	$(info change this - cp -R 'doc\' '$(strip ${1})\')
 	cp -R 'doc\' '$(strip ${1})\'
 	@echo "-> cp source finish"
 
@@ -135,7 +134,7 @@ $(warning "-> windows make shell cross compiling may be take mistake")
 	-a \
 	-tags netgo \
 	-ldflags '-w -s --extldflags "-static"' \
-	-o $(strip $(6)).exe $(strip ${ENV_INFO_DIST_BUILD_ENTRANCE})
+	-o $(strip $(6)) $(strip ${ENV_INFO_DIST_BUILD_ENTRANCE})
 	@echo "=> end $(strip $(6)).exe"
 endef
 
@@ -157,8 +156,8 @@ endif
 distTestTar: distTest
 ifeq ($(OS),Windows_NT)
 	$(call dist_tar_with_windows_source,\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_LOCAL_TEST}/),\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_LOCAL}/),\
+	${ENV_PATH_INFO_ROOT_DIST_LOCAL_TEST}/,\
+	${ENV_PATH_INFO_ROOT_DIST_LOCAL}/,\
 	${ENV_INFO_DIST_ENV_TEST_NAME}\
 	)
 else
@@ -170,6 +169,27 @@ else
 endif
 
 distTestOS: cleanRootDistOs pathCheckRootDistOs
+ifeq (${ENV_INFO_DIST_GO_OS},${ENV_INFO_PLATFORM_OS_WINDOWS})
+ifeq ($(OS),Windows_NT)
+	$(call go_static_binary_windows_dist,\
+	${ENV_PATH_INFO_ROOT_DIST_OS},\
+	${ENV_INFO_DIST_ENV_TEST_NAME},\
+	${ENV_INFO_DIST_BIN_NAME}.exe,\
+	${ENV_INFO_DIST_GO_OS},\
+	${ENV_INFO_DIST_GO_ARCH},\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}/${ENV_INFO_DIST_BIN_NAME}).exe\
+	)
+else
+	$(call go_static_binary_dist,\
+	${ENV_PATH_INFO_ROOT_DIST_OS},\
+	${ENV_INFO_DIST_ENV_TEST_NAME},\
+	${ENV_INFO_DIST_BIN_NAME}.exe,\
+	${ENV_INFO_DIST_GO_OS},\
+	${ENV_INFO_DIST_GO_ARCH},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}/${ENV_INFO_DIST_BIN_NAME}.exe\
+	)
+endif
+else
 ifeq ($(OS),Windows_NT)
 	$(call go_static_binary_windows_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
@@ -189,12 +209,13 @@ else
 	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}/${ENV_INFO_DIST_BIN_NAME}\
 	)
 endif
+endif
 
 distTestOSTar: distTestOS
 ifeq ($(OS),Windows_NT)
 	$(call dist_tar_with_windows_source,\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}),\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/,\
 	${ENV_INFO_DIST_ENV_TEST_NAME}-${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}\
 	)
 else
@@ -204,11 +225,6 @@ else
 	${ENV_INFO_DIST_ENV_TEST_NAME}-${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}\
 	)
 endif
-
-distScpTestOSTar: distTestOSTar
-	$(info => can send file:)
-	$(info scp ${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_BIN_NAME}-${ENV_INFO_DIST_ENV_TEST_NAME}-${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}-${ENV_INFO_DIST_VERSION}${ENV_DIST_MARK}.tar.gz ${ENV_SERVER_TEST_SSH_ALIAS}:${ENV_SERVER_TEST_FOLDER})
-	@echo "=> must check below config of set for release OS Scp"
 
 distRelease: cleanRootDistLocalRelease pathCheckRootDistLocalRelease
 ifeq ($(OS),Windows_NT)
@@ -228,8 +244,8 @@ endif
 distReleaseTar: distRelease
 ifeq ($(OS),Windows_NT)
 	$(call dist_tar_with_windows_source,\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_LOCAL_RELEASE}/),\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_LOCAL}/),\
+	${ENV_PATH_INFO_ROOT_DIST_LOCAL_RELEASE}/,\
+	${ENV_PATH_INFO_ROOT_DIST_LOCAL}/,\
 	${ENV_INFO_DIST_ENV_RELEASE_NAME}\
 	)
 else
@@ -241,6 +257,27 @@ else
 endif
 
 distReleaseOS: cleanRootDistOs pathCheckRootDistOs
+ifeq (${ENV_INFO_DIST_GO_OS},${ENV_INFO_PLATFORM_OS_WINDOWS})
+ifeq ($(OS),Windows_NT)
+	$(call go_static_binary_windows_dist,\
+	${ENV_PATH_INFO_ROOT_DIST_OS},\
+	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
+	${ENV_INFO_DIST_BIN_NAME}.exe,\
+	${ENV_INFO_DIST_GO_OS},\
+	${ENV_INFO_DIST_GO_ARCH},\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}/${ENV_INFO_DIST_BIN_NAME}).exe\
+	)
+else
+	$(call go_static_binary_dist,\
+	${ENV_PATH_INFO_ROOT_DIST_OS},\
+	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
+	${ENV_INFO_DIST_BIN_NAME}.exe,\
+	${ENV_INFO_DIST_GO_OS},\
+	${ENV_INFO_DIST_GO_ARCH},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}/${ENV_INFO_DIST_BIN_NAME}.exe\
+	)
+endif
+else
 ifeq ($(OS),Windows_NT)
 	$(call go_static_binary_windows_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
@@ -260,12 +297,13 @@ else
 	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}/${ENV_INFO_DIST_BIN_NAME}\
 	)
 endif
+endif
 
 distReleaseOSTar: distReleaseOS
 ifeq ($(OS),Windows_NT)
 	$(call dist_tar_with_windows_source,\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH}),\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_GO_OS}/${ENV_INFO_DIST_GO_ARCH},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/,\
 	${ENV_INFO_DIST_ENV_RELEASE_NAME}-${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}\
 	)
 else
@@ -276,11 +314,6 @@ else
 	)
 endif
 
-distScpReleaseOSTar: distReleaseOSTar
-	$(info => can send file:)
-	$(info scp ${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_DIST_BIN_NAME}-${ENV_INFO_DIST_ENV_RELEASE_NAME}-${ENV_INFO_DIST_GO_OS}-${ENV_INFO_DIST_GO_ARCH}-${ENV_INFO_DIST_VERSION}${ENV_DIST_MARK}.tar.gz ${ENV_SERVER_REPO_SSH_ALIAS}:${ENV_SERVER_REPO_FOLDER})
-	@echo "=> must check below config of set for release OS Scp"
-
 distAllLocalTar: distTestTar distReleaseTar
 	@echo "=> all dist as os tar finish"
 
@@ -289,25 +322,25 @@ ifeq ($(OS),Windows_NT)
 	$(call go_static_binary_windows_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
 	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
-	${ENV_INFO_DIST_BIN_NAME},\
+	${ENV_INFO_DIST_BIN_NAME}.exe,\
 	${ENV_INFO_PLATFORM_OS_WINDOWS},\
 	${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}/${ENV_INFO_DIST_BIN_NAME})\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}/${ENV_INFO_DIST_BIN_NAME}).exe\
 	)
 else
 	$(call go_static_binary_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
 	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
-	${ENV_INFO_DIST_BIN_NAME},\
+	${ENV_INFO_DIST_BIN_NAME}.exe,\
 	${ENV_INFO_PLATFORM_OS_WINDOWS},\
 	${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
-	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}/${ENV_INFO_DIST_BIN_NAME}\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}/${ENV_INFO_DIST_BIN_NAME}.exe\
 	)
 endif
 ifeq ($(OS),Windows_NT)
 	$(call dist_tar_with_windows_source,\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}),\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/,\
 	${ENV_INFO_PLATFORM_OS_WINDOWS}-${ENV_INFO_PLATFORM_OS_ARCH_AMD64}\
 	)
 else
@@ -323,25 +356,25 @@ ifeq ($(OS),Windows_NT)
 	$(call go_static_binary_windows_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
 	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
-	${ENV_INFO_DIST_BIN_NAME},\
+	${ENV_INFO_DIST_BIN_NAME}.exe,\
 	${ENV_INFO_PLATFORM_OS_WINDOWS},\
 	${ENV_INFO_PLATFORM_OS_ARCH_386},\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_386}/${ENV_INFO_DIST_BIN_NAME})\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_386}/${ENV_INFO_DIST_BIN_NAME}).exe\
 	)
 else
 	$(call go_static_binary_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
 	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
-	${ENV_INFO_DIST_BIN_NAME},\
+	${ENV_INFO_DIST_BIN_NAME}.exe,\
 	${ENV_INFO_PLATFORM_OS_WINDOWS},\
 	${ENV_INFO_PLATFORM_OS_ARCH_386},\
-	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_386}/${ENV_INFO_DIST_BIN_NAME}\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_386}/${ENV_INFO_DIST_BIN_NAME}.exe\
 	)
 endif
 ifeq ($(OS),Windows_NT)
 	$(call dist_tar_with_windows_source,\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_386}),\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_386},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/,\
 	${ENV_INFO_PLATFORM_OS_WINDOWS}-${ENV_INFO_PLATFORM_OS_ARCH_386}\
 	)
 else
@@ -357,25 +390,25 @@ ifeq ($(OS),Windows_NT)
 	$(call go_static_binary_windows_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
 	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
-	${ENV_INFO_DIST_BIN_NAME},\
+	${ENV_INFO_DIST_BIN_NAME}.exe,\
 	${ENV_INFO_PLATFORM_OS_WINDOWS},\
 	${ENV_INFO_PLATFORM_OS_ARCH_ARM64},\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_ARM64}/${ENV_INFO_DIST_BIN_NAME})\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_ARM64}/${ENV_INFO_DIST_BIN_NAME}).exe\
 	)
 else
 	$(call go_static_binary_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
 	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
-	${ENV_INFO_DIST_BIN_NAME},\
+	${ENV_INFO_DIST_BIN_NAME}.exe,\
 	${ENV_INFO_PLATFORM_OS_WINDOWS},\
 	${ENV_INFO_PLATFORM_OS_ARCH_ARM64},\
-	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_ARM64}/${ENV_INFO_DIST_BIN_NAME}\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_ARM64}/${ENV_INFO_DIST_BIN_NAME}.exe\
 	)
 endif
 ifeq ($(OS),Windows_NT)
 	$(call dist_tar_with_windows_source,\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_ARM64}),\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_ARM64},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/,\
 	${ENV_INFO_PLATFORM_OS_WINDOWS}-${ENV_INFO_PLATFORM_OS_ARCH_ARM64}\
 	)
 else
@@ -391,25 +424,25 @@ ifeq ($(OS),Windows_NT)
 	$(call go_static_binary_windows_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
 	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
-	${ENV_INFO_DIST_BIN_NAME},\
+	${ENV_INFO_DIST_BIN_NAME}.exe,\
 	${ENV_INFO_PLATFORM_OS_WINDOWS},\
 	${ENV_INFO_PLATFORM_OS_ARCH_ARM},\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_ARM}/${ENV_INFO_DIST_BIN_NAME})\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_ARM}/${ENV_INFO_DIST_BIN_NAME}).exe\
 	)
 else
 	$(call go_static_binary_dist,\
 	${ENV_PATH_INFO_ROOT_DIST_OS},\
 	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
-	${ENV_INFO_DIST_BIN_NAME},\
+	${ENV_INFO_DIST_BIN_NAME}.exe,\
 	${ENV_INFO_PLATFORM_OS_WINDOWS},\
 	${ENV_INFO_PLATFORM_OS_ARCH_ARM},\
-	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_ARM}/${ENV_INFO_DIST_BIN_NAME}\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_ARM}/${ENV_INFO_DIST_BIN_NAME}.exe\
 	)
 endif
 ifeq ($(OS),Windows_NT)
 	$(call dist_tar_with_windows_source,\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_ARM}),\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_WINDOWS}/${ENV_INFO_PLATFORM_OS_ARCH_ARM},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/,\
 	${ENV_INFO_PLATFORM_OS_WINDOWS}-${ENV_INFO_PLATFORM_OS_ARCH_ARM}\
 	)
 else
@@ -444,8 +477,8 @@ else
 endif
 ifeq ($(OS),Windows_NT)
 	$(call dist_tar_with_windows_source,\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_LINUX}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}),\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_LINUX}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/,\
 	${ENV_INFO_PLATFORM_OS_LINUX}-${ENV_INFO_PLATFORM_OS_ARCH_AMD64}\
 	)
 else
@@ -478,8 +511,8 @@ else
 endif
 ifeq ($(OS),Windows_NT)
 	$(call dist_tar_with_windows_source,\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_LINUX}/${ENV_INFO_PLATFORM_OS_ARCH_386}),\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_LINUX}/${ENV_INFO_PLATFORM_OS_ARCH_386},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/,\
 	${ENV_INFO_PLATFORM_OS_LINUX}-${ENV_INFO_PLATFORM_OS_ARCH_386}\
 	)
 else
@@ -512,8 +545,8 @@ else
 endif
 ifeq ($(OS),Windows_NT)
 	$(call dist_tar_with_windows_source,\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_LINUX}/${ENV_INFO_PLATFORM_OS_ARCH_ARM64}),\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_LINUX}/${ENV_INFO_PLATFORM_OS_ARCH_ARM64},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/,\
 	${ENV_INFO_PLATFORM_OS_LINUX}-${ENV_INFO_PLATFORM_OS_ARCH_ARM64}\
 	)
 else
@@ -546,8 +579,8 @@ else
 endif
 ifeq ($(OS),Windows_NT)
 	$(call dist_tar_with_windows_source,\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_LINUX}/${ENV_INFO_PLATFORM_OS_ARCH_ARM}),\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_LINUX}/${ENV_INFO_PLATFORM_OS_ARCH_ARM},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/,\
 	${ENV_INFO_PLATFORM_OS_LINUX}-${ENV_INFO_PLATFORM_OS_ARCH_ARM}\
 	)
 else
@@ -582,8 +615,8 @@ else
 endif
 ifeq ($(OS),Windows_NT)
 	$(call dist_tar_with_windows_source,\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}),\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/,\
 	${ENV_INFO_PLATFORM_OS_MACOS}-${ENV_INFO_PLATFORM_OS_ARCH_AMD64}\
 	)
 else
@@ -601,8 +634,8 @@ ifeq ($(OS),Windows_NT)
 	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
 	${ENV_INFO_DIST_BIN_NAME},\
 	${ENV_INFO_PLATFORM_OS_MACOS},\
-	${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}/${ENV_INFO_DIST_BIN_NAME})\
+	${ENV_INFO_PLATFORM_OS_ARCH_ARM64},\
+	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_ARM64}/${ENV_INFO_DIST_BIN_NAME})\
 	)
 else
 	$(call go_static_binary_dist,\
@@ -610,21 +643,21 @@ else
 	${ENV_INFO_DIST_ENV_RELEASE_NAME},\
 	${ENV_INFO_DIST_BIN_NAME},\
 	${ENV_INFO_PLATFORM_OS_MACOS},\
-	${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
-	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}/${ENV_INFO_DIST_BIN_NAME}\
+	${ENV_INFO_PLATFORM_OS_ARCH_ARM64},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_ARM64}/${ENV_INFO_DIST_BIN_NAME}\
 	)
 endif
 ifeq ($(OS),Windows_NT)
 	$(call dist_tar_with_windows_source,\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64}),\
-	$(subst /,\,${ENV_PATH_INFO_ROOT_DIST_OS}/),\
-	${ENV_INFO_PLATFORM_OS_MACOS}-${ENV_INFO_PLATFORM_OS_ARCH_AMD64}\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_ARM64},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/,\
+	${ENV_INFO_PLATFORM_OS_MACOS}-${ENV_INFO_PLATFORM_OS_ARCH_ARM64}\
 	)
 else
 	$(call dist_tar_with_source,\
-	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_AMD64},\
+	${ENV_PATH_INFO_ROOT_DIST_OS}/${ENV_INFO_PLATFORM_OS_MACOS}/${ENV_INFO_PLATFORM_OS_ARCH_ARM64},\
 	${ENV_PATH_INFO_ROOT_DIST_OS}/,\
-	${ENV_INFO_PLATFORM_OS_MACOS}-${ENV_INFO_PLATFORM_OS_ARCH_AMD64}\
+	${ENV_INFO_PLATFORM_OS_MACOS}-${ENV_INFO_PLATFORM_OS_ARCH_ARM64}\
 	)
 endif
 
@@ -634,8 +667,8 @@ distPlatformTarCommonUse: distPlatformTarLinuxAmd64 distPlatformTarWinAmd64 dist
 
 distPlatformTarAll: distPlatformTarAllLinux distPlatformTarAllMacos distPlatformTarAllWindows
 
-helpDist:
-	@echo "Help: helpDist.mk"
+helpGoDist:
+	@echo "Help: MakeGoDist.mk"
 	@echo "-- distTestOS or distReleaseOS will out abi as: $(ENV_INFO_DIST_GO_OS) $(ENV_INFO_DIST_GO_ARCH) --"
 	@echo "~> make cleanAllDist             - clean all dist at $(ENV_PATH_INFO_ROOT_DIST)"
 	@echo "~> make distTest                 - build dist at ${ENV_PATH_INFO_ROOT_DIST_LOCAL_TEST} in local OS"

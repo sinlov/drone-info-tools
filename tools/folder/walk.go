@@ -58,15 +58,15 @@ func WalkAllByMatchPath(path string, pattern string, ignoreFolder bool) ([]strin
 		return nil, fmt.Errorf("want Walk path is file, at: %s", path)
 	}
 	files := make([]string, 0, 30)
-	err = filepath.Walk(path, func(filename string, fi os.FileInfo, err error) error {
+	err = filepath.Walk(path, func(filename string, fi os.FileInfo, errWalk error) error {
 		if ignoreFolder && fi.IsDir() { // ignore dir
 			return nil
 		}
 		innerPath := strings.Replace(filename, path, "", -1)
 		innerPath = strings.TrimPrefix(innerPath, string(filepath.Separator))
-		matched, err := regexp.MatchString(pattern, innerPath)
-		if err != nil {
-			return nil
+		matched, errReg := regexp.MatchString(pattern, innerPath)
+		if errReg != nil {
+			return errReg
 		}
 		if matched {
 			files = append(files, filename)

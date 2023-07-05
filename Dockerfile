@@ -1,33 +1,43 @@
-# This dockerfile uses extends image https://hub.docker.com/sinlov/drone-info-tools
+# This dockerfile uses extends image https://hub.docker.com/bridgewwater/drone-info-tools
 # VERSION 1
 # Author: sinlov
 # dockerfile offical document https://docs.docker.com/engine/reference/builder/
 # https://hub.docker.com/_/golang
 FROM golang:1.17.13-buster as builder
 
-ARG GO_PATH_SOURCE_DIR=/go/src/
+ARG GO_ENV_PACKAGE_NAME=github.com/bridgewwater/drone-info-tools
+ARG GO_ENV_ROOT_BUILD_BIN_NAME=drone-info-tools
+ARG GO_ENV_ROOT_BUILD_BIN_PATH=build/${GO_ENV_ROOT_BUILD_BIN_NAME}
+ARG GO_ENV_ROOT_BUILD_ENTRANCE=cmd/drone-info-tools/main.go
+
+ARG GO_PATH_SOURCE_DIR=/go/src
 WORKDIR ${GO_PATH_SOURCE_DIR}
 
-RUN mkdir -p ${GO_PATH_SOURCE_DIR}/github.com/sinlov/drone-info-tools
-COPY $PWD ${GO_PATH_SOURCE_DIR}/github.com/sinlov/drone-info-tools
+RUN mkdir -p ${GO_PATH_SOURCE_DIR}/${GO_ENV_PACKAGE_NAME}
+COPY $PWD ${GO_PATH_SOURCE_DIR}/${GO_ENV_PACKAGE_NAME}
 
-RUN cd ${GO_PATH_SOURCE_DIR}/github.com/sinlov/drone-info-tools && \
+RUN cd ${GO_PATH_SOURCE_DIR}/${GO_ENV_PACKAGE_NAME} && \
     go mod download -x
 
-RUN  cd ${GO_PATH_SOURCE_DIR}/github.com/sinlov/drone-info-tools && \
+RUN  cd ${GO_PATH_SOURCE_DIR}/${GO_ENV_PACKAGE_NAME} && \
   CGO_ENABLED=0 \
   go build \
   -a \
   -installsuffix cgo \
   -ldflags '-w -s --extldflags "-static -fpic"' \
   -tags netgo \
-  -o drone-info-tools \
-  main.go
+  -o ${GO_ENV_ROOT_BUILD_BIN_PATH} \
+  ${GO_ENV_ROOT_BUILD_ENTRANCE}
 
 # https://hub.docker.com/_/alpine
 FROM alpine:3.17
 
 ARG DOCKER_CLI_VERSION=${DOCKER_CLI_VERSION}
+ARG GO_ENV_PACKAGE_NAME=github.com/bridgewwater/drone-info-tools
+ARG GO_ENV_ROOT_BUILD_BIN_NAME=drone-info-tools
+ARG GO_ENV_ROOT_BUILD_BIN_PATH=build/${GO_ENV_ROOT_BUILD_BIN_NAME}
+
+ARG GO_PATH_SOURCE_DIR=/go/src
 
 #RUN apk --no-cache add \
 #  ca-certificates mailcap curl \
@@ -36,6 +46,6 @@ ARG DOCKER_CLI_VERSION=${DOCKER_CLI_VERSION}
 RUN mkdir /app
 WORKDIR /app
 
-COPY --from=builder /go/src/github.com/sinlov/drone-info-tools/drone-info-tools .
-ENTRYPOINT ["/app/drone-info-tools"]
+COPY --from=builder ${GO_PATH_SOURCE_DIR}/${GO_ENV_PACKAGE_NAME}/${GO_ENV_ROOT_BUILD_BIN_PATH} .
+ENTRYPOINT [ "/app/drone-info-tools" ]
 # CMD ["/app/drone-info-tools", "--help"]

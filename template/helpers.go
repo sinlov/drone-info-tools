@@ -17,6 +17,7 @@ package template
 import (
 	"github.com/Masterminds/sprig/v3"
 	"github.com/aymerick/raymond"
+	"reflect"
 )
 
 // RegisterSettings
@@ -24,6 +25,11 @@ import (
 func RegisterSettings(funcSettings map[string]interface{}) {
 	for name, function := range sprig.GenericFuncMap() {
 		if invalidHelper(name) {
+			continue
+		}
+		val := reflect.ValueOf(function)
+		funcType := val.Type()
+		if funcType.NumOut() != 1 {
 			continue
 		}
 
