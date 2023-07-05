@@ -34,6 +34,12 @@ jobs:
           go env
           go version
 
+      - name: Run go install check
+        run: go get -t -v ./...
+
+      - name: Run go build
+        run: go build -v ./...
+
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
@@ -44,7 +50,7 @@ jobs:
           # version: v1.45.2 for go verison 1.18+
           # version: v1.42.1 for go verison 1.17+
           # version: v1.41.0 for go verison 1.16+
-          version: v1.42.1
+          version: v1.53.2
 
           # Optional: working directory, useful for monorepos
           # working-directory: somedir
@@ -70,13 +76,6 @@ jobs:
 
           # Optional: The mode to install golangci-lint. It can be 'binary' or 'goinstall'.
           # install-mode: "goinstall"
-
-
-      - name: Run go install check
-        run: go get -t -v ./...
-
-      - name: Run go build
-        run: go build -v ./...
 
       - name: Run test
         run: go test -v ./...
