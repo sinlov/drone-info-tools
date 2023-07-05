@@ -19,7 +19,11 @@
     "docker",
     "action"
   ],
-  "author": "sinlov",
+  "author": {
+    "name": "sinlov",
+    "email": "sinlovgmppt@gmail.com",
+    "url": "https://github.com/sinlov/drone-info-tools"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/sinlov/drone-info-tools/issues"
