@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.21.0](https://github.com/sinlov/drone-info-tools/compare/v1.20.0...v1.21.0) (2023-07-05)
+
+
+### ✨ Features
+
+* add GetPackageJsonVersionGoStyleKeepSelect for pkgJson ([08777df](https://github.com/sinlov/drone-info-tools/commit/08777df5d619d6c823188d8ca3d21c4d3849c90e))
+
 ## [1.20.0](https://github.com/sinlov/drone-info-tools/compare/v1.10.0...v1.20.0) (2023-07-05)
 
 
