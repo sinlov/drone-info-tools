@@ -39,7 +39,7 @@ var packageJson string
 
 func main() {
 	pkgJson.InitPkgJsonContent(resource.PackageJson)
-	
+
 	app := cli.NewApp()
 	app.Version = pkgJson.GetPackageJsonVersionGoStyle()
 	droneFlag := drone_urfave_cli_v2.DroneInfoUrfaveCliFlag()
@@ -64,7 +64,7 @@ import (
 	tools "github.com/sinlov/drone-info-tools/tools/str_tools"
 )
 
-func main()  {
+func main() {
 	tools.StrInArr(foo, bar)
 }
 ```
@@ -88,7 +88,7 @@ import (
 )
 
 func main() {
-  template.RegisterSettings(template.DefaultFunctions)
+	template.RegisterSettings(template.DefaultFunctions)
 }
 ```
 
@@ -121,9 +121,19 @@ $ echo "go mod edit -require=$(go list -mod=readonly -m -versions github.com/sin
 $ echo "go mod vendor"
 ```
 
-## evn
+## env
 
-- golang sdk 1.17+
+- minimum go version: go 1.17
+- change `go 1.17`, `^1.17`, `1.17.13` to new go version
+
+### libs
+
+| lib                                  | version             |
+|:-------------------------------------|:--------------------|
+| https://github.com/stretchr/testify  | v1.8.4              |
+| https://github.com/urfave/cli        | v2.25.7             |
+| https://github.com/aymerick/raymond  | v2.0.2+incompatible |
+| https://github.com/Masterminds/sprig | v3.2.3              |
 
 # dev
 
