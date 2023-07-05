@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.20.0](https://github.com/sinlov/drone-info-tools/compare/v1.10.0...v1.20.0) (2023-07-05)
+
+
+### ✨ Features
+
+* change to go1.18 to fix build ([b25a58e](https://github.com/sinlov/drone-info-tools/commit/b25a58e51c1836380faeb2dac5a01b093bfdc0ca))
+* update safe depend and update code for safe ([fb99bea](https://github.com/sinlov/drone-info-tools/commit/fb99bea4223d5751f57da19e15ebfc3282962c02))
+
 ## [1.10.0](https://github.com/sinlov/drone-info-tools/compare/v1.9.0...v1.10.0) (2023-06-14)
 
 
