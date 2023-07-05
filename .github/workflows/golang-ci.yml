@@ -6,8 +6,8 @@ on:
   pull_request:
     branches: [ main ]
 
-#env:
-#  CODECOV_TOKEN: '${{ secrets.CODECOV_TOKEN }}'
+permissions:
+  contents: read
 
 jobs:
   golang-ci:
@@ -40,8 +40,8 @@ jobs:
           # Require: The version of golangci-lint to use.
           # When `install-mode` is `binary` (default) the value can be v1.2 or v1.2.3 or `latest` to use the latest version.
           # When `install-mode` is `goinstall` the value can be v1.2.3, `latest`, or the hash of a commit.
-          # version: v1.53.2 need go verison 1.19+
-          version: v1.49.0
+          # version: v1.49.0 for go verison 1.18
+          version: v1.53.2
           # Optional: working directory, useful for monorepos
           # working-directory: somedir
 
