@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.23.0](https://github.com/sinlov/drone-info-tools/compare/v1.22.0...v1.23.0) (2023-07-18)
+
+
+### ✨ Features
+
+* add drone_log.Error and drone_log.Errorf fast print ([6d5ecd8](https://github.com/sinlov/drone-info-tools/commit/6d5ecd83ab02fceb9f1282cd0cd5669703387fd3))
+
 ## [1.22.0](https://github.com/sinlov/drone-info-tools/compare/v1.21.0...v1.22.0) (2023-07-18)
 
 
