@@ -1,6 +1,7 @@
 package drone_log
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -220,6 +221,54 @@ func TestWarnf(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			Warnf(tt.args.format, tt.args.v...)
+		})
+	}
+}
+
+func TestError(t *testing.T) {
+	type args struct {
+		err error
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		{
+			name: "test error",
+			args: args{
+				err: fmt.Errorf("new test error"),
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			Error(tt.args.err)
+		})
+	}
+}
+
+func TestErrorf(t *testing.T) {
+	type args struct {
+		err    error
+		format string
+		v      []interface{}
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		{
+			name: "test error",
+			args: args{
+				err:    fmt.Errorf("new test error"),
+				format: "test error",
+				v:      nil,
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			Errorf(tt.args.err, tt.args.format, tt.args.v...)
 		})
 	}
 }

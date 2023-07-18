@@ -74,6 +74,19 @@ func Warnf(format string, v ...any) {
 	log.Printf("%s %s", color.Yellow.Render("warn:"), logInfo)
 }
 
+func Error(err error) {
+	Errorf(err, "")
+}
+
+func Errorf(err error, format string, v ...any) {
+	if format != "" {
+		logInfo := fmt.Sprintf(format, v...)
+		log.Printf("%s %s\nerror content: %v", color.Red.Render("err:"), logInfo, err)
+	} else {
+		log.Printf("%s %v\n", color.Red.Render("err:"), err)
+	}
+}
+
 func Fatalf(format string, v ...any) {
 	logInfo := fmt.Sprintf(format, v...)
 	log.Fatalf("fatal: %s", logInfo)
