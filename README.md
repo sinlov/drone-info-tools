@@ -1,4 +1,4 @@
-[![golang-ci](https://github.com/sinlov/drone-info-tools/actions/workflows/golang-ci.yml/badge.svg)](https://github.com/sinlov/drone-info-tools/actions/workflows/golang-ci.yml)
+[![ci](https://github.com/sinlov/drone-info-tools/actions/workflows/ci.yml/badge.svg)](https://github.com/sinlov/drone-info-tools/actions/workflows/ci.yml)
 [![go mod version](https://img.shields.io/github/go-mod/go-version/sinlov/drone-info-tools?label=go.mod)](https://github.com/sinlov/drone-info-tools)
 [![GoDoc](https://godoc.org/github.com/sinlov/drone-info-tools?status.png)](https://godoc.org/github.com/sinlov/drone-info-tools)
 [![goreportcard](https://goreportcard.com/badge/github.com/sinlov/drone-info-tools)](https://goreportcard.com/report/github.com/sinlov/drone-info-tools)
@@ -132,8 +132,11 @@ $ echo "go mod vendor"
 |:-------------------------------------|:--------------------|
 | https://github.com/stretchr/testify  | v1.8.4              |
 | https://github.com/urfave/cli        | v2.25.7             |
+| https://github.com/gookit/color      | v1.5.3              |
 | https://github.com/aymerick/raymond  | v2.0.2+incompatible |
 | https://github.com/Masterminds/sprig | v3.2.3              |
+
+- more libs see [go.mod](https://github.com/sinlov/drone-info-tools/blob/main/go.mod)
 
 # dev
 
