@@ -1,6 +1,6 @@
 {
   "name": "drone-info-tools",
-  "version": "1.21.0",
+  "version": "1.22.0",
   "description": "drone info lib and can mock data",
   "main": "index.js",
   "directories": {
