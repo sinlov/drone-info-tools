@@ -12,6 +12,15 @@ var openDebug = false
 
 func OpenDebug() {
 	openDebug = true
+	ShowLogLineNo(true)
+}
+
+func ShowLogLineNo(openLine bool) {
+	if openLine {
+		log.SetFlags(log.Lshortfile | log.LstdFlags)
+	} else {
+		log.SetFlags(log.LstdFlags)
+	}
 }
 
 func Debugf(format string, v ...any) {
