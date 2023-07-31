@@ -180,6 +180,7 @@ func TestVerboseJson(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			ShowLogLineNo(true)
 			VerboseJson(tt.args.d)
 		})
 	}
@@ -282,6 +283,7 @@ func TestError(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			ShowLogLineNo(true)
 			Error(tt.args.err)
 		})
 	}
