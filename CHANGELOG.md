@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.24.0](https://github.com/sinlov/drone-info-tools/compare/v1.23.0...v1.24.0) (2023-07-31)
+
+
+### ✨ Features
+
+* add drone_log.ShowLogLineNo and let OpenDebug open log shortfile flag ([bf284e2](https://github.com/sinlov/drone-info-tools/commit/bf284e282f6386f81bd8f900f5bb3094bb707386))
+* add Drone.Build.SourceBranch and some env doc ([952e19c](https://github.com/sinlov/drone-info-tools/commit/952e19cb0e08d54b0af21bbc20353a1f4a6c983e))
+
 ## [1.23.0](https://github.com/sinlov/drone-info-tools/compare/v1.22.0...v1.23.0) (2023-07-18)
 
 
