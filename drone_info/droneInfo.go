@@ -30,10 +30,15 @@ const (
 	// Provides the commit author avatar for the current running build. This is the avatar from source control management system (e.g. GitHub).
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-commit-author-avatar/
 	EnvDroneCommitAuthorAvatar = "DRONE_COMMIT_AUTHOR_AVATAR"
-	EnvDroneCommitBranch       = "DRONE_COMMIT_BRANCH"
-	EnvDroneCommitLink         = "DRONE_COMMIT_LINK"
-	EnvDroneCommitMessage      = "DRONE_COMMIT_MESSAGE"
-	EnvDroneCommitSha          = "DRONE_COMMIT_SHA"
+	// EnvDroneCommitBranch
+	//
+	// Provides the target branch for the push or pull request. This value may be empty for tag events.
+	//
+	// @doc https://docs.drone.io/pipeline/environment/reference/drone-commit-branch/
+	EnvDroneCommitBranch  = "DRONE_COMMIT_BRANCH"
+	EnvDroneCommitLink    = "DRONE_COMMIT_LINK"
+	EnvDroneCommitMessage = "DRONE_COMMIT_MESSAGE"
+	EnvDroneCommitSha     = "DRONE_COMMIT_SHA"
 	// EnvDroneCommitRef
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-commit-ref/
 	EnvDroneCommitRef = "DRONE_COMMIT_REF"
@@ -69,9 +74,16 @@ const (
 	EnvDroneBuildStatus    = "DRONE_BUILD_STATUS"
 	EnvDroneBuildNumber    = "DRONE_BUILD_NUMBER"
 	EnvDroneBuildLink      = "DRONE_BUILD_LINK"
-	EnvDroneBuildEvent     = "DRONE_BUILD_EVENT"
-	EnvDroneBuildStarted   = "DRONE_BUILD_STARTED"
-	EnvDroneBuildFinished  = "DRONE_BUILD_FINISHED"
+	// EnvDroneBuildEvent
+	//
+	// Provides the event that triggered the pipeline execution.
+	//
+	// This value will be push, pull_request, tag, promote, cron, custom.
+	//
+	// @doc https://docs.drone.io/pipeline/environment/reference/drone-build-event/
+	EnvDroneBuildEvent    = "DRONE_BUILD_EVENT"
+	EnvDroneBuildStarted  = "DRONE_BUILD_STARTED"
+	EnvDroneBuildFinished = "DRONE_BUILD_FINISHED"
 
 	// EnvDroneTag
 	// by env: DRONE_TAG
@@ -83,12 +95,30 @@ const (
 	// Provides the target branch for the push or pull request. This value may be empty for tag events.
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-branch/
 	EnvDroneBranch = "DRONE_BRANCH"
+
+	// EnvDroneSourceBranch
+	//
+	// Provides the source branch for the pull request. This value may be empty for certain source control management providers.
+	//
+	// This environment variable can be used in conjunction with the target branch variable to get the pull request base and head branch.
+	//
+	// @doc https://docs.drone.io/pipeline/environment/reference/drone-source-branch/
+	EnvDroneSourceBranch = "DRONE_SOURCE_BRANCH"
 	// EnvDroneTargetBranch
+	//
+	// Provides the target branch for the push or pull request. This value may be empty for tag events.
+	//
 	// This environment variable can be used in conjunction with the source branch variable to get the pull request base and head branch.
+	//
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-target-branch/
 	EnvDroneTargetBranch = "DRONE_TARGET_BRANCH"
-	EnvDronePR           = "DRONE_PULL_REQUEST"
-	EnvDroneDeployTo     = "DRONE_DEPLOY_TO"
+	// EnvDronePR
+	//
+	// Provides the pull request number for the current running build. If the build is not a pull request the variable is empty.
+	//
+	// @doc https://docs.drone.io/pipeline/environment/reference/drone-pull-request/
+	EnvDronePR       = "DRONE_PULL_REQUEST"
+	EnvDroneDeployTo = "DRONE_DEPLOY_TO"
 
 	// EnvDroneStageStarted
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-stage-started/
@@ -234,20 +264,48 @@ type (
 		// Provides the target branch for the push or pull request. This value may be empty for tag events.
 		// @doc https://docs.drone.io/pipeline/environment/reference/drone-branch/
 		Branch string
+
+		// SourceBranch
+		// by env:DRONE_SOURCE_BRANCH
+		//
+		// Provides the source branch for the pull request. This value may be empty for certain source control management providers.
+		//
+		// This environment variable can be used in conjunction with the target branch variable to get the pull request base and head branch.
+		//
+		// @doc https://docs.drone.io/pipeline/environment/reference/drone-source-branch/
+		SourceBranch string
+
 		// TargetBranch
-		// by env:DRONE_TARGET_BRANCH
+		//
+		// Provides the target branch for the push or pull request. This value may be empty for tag events.
+		//
 		// This environment variable can be used in conjunction with the source branch variable to get the pull request base and head branch.
+		//
 		// @doc https://docs.drone.io/pipeline/environment/reference/drone-target-branch/
 		TargetBranch string
 		// Link
 		// by env:DRONE_BUILD_LINK
 		// @doc https://docs.drone.io/pipeline/environment/reference/drone-build-link/
-		Link       string //  providers the current build link
+		Link string //  providers the current build link
+		// Event
+		// by env:DRONE_BUILD_EVENT
+		//
+		// Provides the event that triggered the pipeline execution.
+		//
+		// This value will be push, pull_request, tag, promote, cron, custom.
+		//
+		// @doc https://docs.drone.io/pipeline/environment/reference/drone-build-event/
 		Event      string //  trigger event
 		StartAt    uint64 //  build start at ( unix timestamp )
 		FinishedAt uint64 //  build finish at ( unix timestamp )
-		PR         string //  build pull request
-		DeployTo   string //  build deploy to
+		// PR
+		// by env:DRONE_PULL_REQUEST
+		//
+		// Provides the pull request number for the current running build. If the build is not a pull request the variable is empty.
+		//
+		// @doc https://docs.drone.io/pipeline/environment/reference/drone-pull-request/
+		PR       string //  build pull request
+		DeployTo string //  build deploy to
 		// FailedStages
 		// by env:DRONE_FAILED_STAGES
 		// Provides a comma-separate list of failed pipeline stages for the current running build.
@@ -265,7 +323,13 @@ type (
 		// Link
 		// by env:DRONE_COMMIT_LINK
 		// @doc https://docs.drone.io/pipeline/environment/reference/drone-commit-link/
-		Link    string //  providers the http link to the current commit in the remote source code management system(e.g.GitHub)
+		Link string //  providers the http link to the current commit in the remote source code management system(e.g.GitHub)
+		// Branch
+		// by env:DRONE_COMMIT_BRANCH
+		//
+		// Provides the target branch for the push or pull request. This value may be empty for tag events.
+		//
+		// @doc https://docs.drone.io/pipeline/environment/reference/drone-commit-branch/
 		Branch  string //  providers the branch for the current commit
 		Message string //  providers the commit message for the current build
 		// Sha

@@ -42,6 +42,7 @@ const (
 	mockEnvDroneStageName     string = "build"
 
 	mockEnvDroneTag                = ""
+	mockEnvDroneSourceBranch       = ""
 	mockEnvDroneTargetBranch       = ""
 	mockEnvDroneBuildEvent         = "push"
 	mockEnvDroneBuildStatusSuccess = "success"
@@ -242,6 +243,7 @@ func MockDroneInfoEnvFull(debug bool) {
 	setEnvStr(EnvDroneBuildStatus, mockEnvDroneBuildStatusSuccess)
 	setEnvU64(EnvDroneBuildNumber, mockEnvDroneBuildNumber)
 	setEnvStr(EnvDroneTag, mockEnvDroneTag)
+	setEnvStr(EnvDroneSourceBranch, mockEnvDroneSourceBranch)
 	setEnvStr(EnvDroneTargetBranch, mockEnvDroneTargetBranch)
 	setEnvStr(EnvDroneBuildLink, fmt.Sprintf("%s/%s/%s/%d", droneBaseUrl, owner, repoName, buildNumber))
 	setEnvStr(EnvDroneBuildEvent, mockEnvDroneBuildEvent)

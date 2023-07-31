@@ -6,6 +6,46 @@ import (
 	"testing"
 )
 
+func TestShowLogLineNo(t *testing.T) {
+	// mock ShowLogLineNo
+	type args struct {
+		format string
+		v      []interface{}
+	}
+	tests := []struct {
+		name     string
+		openLine bool
+		args     args
+	}{
+		{
+			name:     "test verbose open line",
+			openLine: true,
+			args: args{
+				format: "test verbose",
+				v:      nil,
+			},
+		},
+		{
+			name:     "test verbose close line",
+			openLine: false,
+			args: args{
+				format: "test verbose",
+				v:      nil,
+			},
+		},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+
+			// do ShowLogLineNo
+			ShowLogLineNo(tc.openLine)
+
+			// verify ShowLogLineNo
+			Verbosef(tc.args.format, tc.args.v...)
+		})
+	}
+}
+
 func TestDebugf(t *testing.T) {
 	type args struct {
 		format string

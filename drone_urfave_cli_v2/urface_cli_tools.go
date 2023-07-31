@@ -86,8 +86,13 @@ func DroneInfoUrfaveCliFlag() []cli.Flag {
 			EnvVars: []string{drone_info.EnvDroneBranch},
 		},
 		&cli.StringFlag{
+			Name:    "build.source_branch",
+			Usage:   "the source branch for the pull request. This environment variable can be used in conjunction with the target branch variable to get the pull request base and head branch.",
+			EnvVars: []string{drone_info.EnvDroneSourceBranch},
+		},
+		&cli.StringFlag{
 			Name:    "build.target_branch",
-			Usage:   "This environment variable can be used in conjunction with the source branch variable to get the pull request base and head branch.",
+			Usage:   "the target branch for the push or pull request. This environment variable can be used in conjunction with the source branch variable to get the pull request base and head branch.",
 			EnvVars: []string{drone_info.EnvDroneTargetBranch},
 		},
 		&cli.StringFlag{
@@ -288,6 +293,7 @@ func UrfaveCliBindDroneInfo(c *cli.Context) drone_info.Drone {
 			Number:       c.Uint64("build.number"),
 			Tag:          c.String("build.tag"),
 			Branch:       c.String("build.branch"),
+			SourceBranch: c.String("build.source_branch"),
 			TargetBranch: c.String("build.target_branch"),
 			Link:         c.String("build.link"),
 			Event:        c.String("build.event"),
