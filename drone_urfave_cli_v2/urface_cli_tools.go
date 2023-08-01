@@ -268,9 +268,9 @@ func UrfaveCliBindDroneInfo(c *cli.Context) drone_info.Drone {
 		repoHostName = parse.Hostname()
 	}
 	stageStartT := c.Uint64("stage.started")
-	stageStartTime := time.Unix(int64(stageStartT), 0).Format(drone_info.DroneTimeFormatDefault)
+	stageStartTime := time.Unix(int64(stageStartT), 0).In(time.Local).Format(drone_info.DroneTimeFormatDefault)
 	stageFinishedT := c.Uint64("stage.finished")
-	stageFinishedTime := time.Unix(int64(stageStartT), 0).Format(drone_info.DroneTimeFormatDefault)
+	stageFinishedTime := time.Unix(int64(stageStartT), 0).In(time.Local).Format(drone_info.DroneTimeFormatDefault)
 	var drone = drone_info.Drone{
 		//  repo info
 		Repo: drone_info.Repo{

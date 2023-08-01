@@ -135,9 +135,9 @@ func MockDroneInfoDroneSystemRefs(
 		repoHostName = parse.Hostname()
 	}
 	stageStartT := mockEnvDroneStageStarted
-	stageStartTime := time.Unix(int64(stageStartT), 0).Format(DroneTimeFormatDefault)
+	stageStartTime := time.Unix(int64(stageStartT), 0).In(time.UTC).Format(DroneTimeFormatDefault)
 	stageFinishedT := mockEnvDroneStageFinished
-	stageFinishedTime := time.Unix(int64(stageStartT), 0).Format(DroneTimeFormatDefault)
+	stageFinishedTime := time.Unix(int64(stageStartT), 0).In(time.UTC).Format(DroneTimeFormatDefault)
 	commitSHA := mockEnvDroneCommitSha
 	droneBaseUrl := fmt.Sprintf("%s://%s", droneProto, droneHost)
 	buildNumber := mockEnvDroneBuildNumber

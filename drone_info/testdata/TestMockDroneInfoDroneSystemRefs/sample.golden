@@ -44,9 +44,9 @@
   },
   "Stage": {
     "StartedAt": 1674531206,
-    "StartedTime": "2023-01-24-11-33-26",
+    "StartedTime": "2023-01-24-03-33-26",
     "FinishedAt": 1674532106,
-    "FinishedTime": "2023-01-24-11-33-26",
+    "FinishedTime": "2023-01-24-03-33-26",
     "Machine": "CI-machine",
     "Os": "linux",
     "Arch": "amd64",
