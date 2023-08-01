@@ -58,15 +58,21 @@ const (
 // MockDroneInfo
 // status DroneBuildStatusSuccess DroneBuildStatusFailure
 // this mock will use mockEnvDroneBranch as heads by MockDroneInfoRefs
+//
+// notes: this method mock time use time.UTC
 func MockDroneInfo(status string) *Drone {
 	droneInfoRefs, _ := MockDroneInfoRefs(status, fmt.Sprintf("refs/heads/%s", mockEnvDroneBranch))
 	return droneInfoRefs
 }
 
 // MockDroneInfoRefs
-// host use mockEnvDroneSystemHost
-// status DroneBuildStatusSuccess DroneBuildStatusFailure
-// refs by: git show-ref --head --dereference
+//
+//	host use mockEnvDroneSystemHost
+//	status DroneBuildStatusSuccess DroneBuildStatusFailure
+//	refs by: git show-ref --head --dereference
+//
+// notes: this method mock time use time.UTC
+//
 // @doc https://git-scm.com/docs/git-show-ref
 // like refs/heads/master refs/remotes/* refs/pull/* refs/tags/v1.0.0
 func MockDroneInfoRefs(status string, refs string) (*Drone, error) {
@@ -82,6 +88,8 @@ func MockDroneInfoRefs(status string, refs string) (*Drone, error) {
 // status DroneBuildStatusSuccess DroneBuildStatusFailure and default is DroneBuildStatusSuccess
 //
 // refs by: git show-ref --head --dereference
+//
+// notes: this method mock time use time.UTC
 //
 // @doc https://git-scm.com/docs/git-show-ref
 // like refs/heads/master refs/remotes/* refs/pull/* refs/tags/v1.0.0
