@@ -1,0 +1,64 @@
+{
+  "Repo": {
+    "Link": "https://github.com/sinlov/drone-file-browser-plugin",
+    "ShortName": "drone-file-browser-plugin",
+    "GroupName": "sinlov",
+    "FullName": "sinlov/drone-file-browser-plugin",
+    "OwnerName": "sinlov",
+    "Scm": "git",
+    "RemoteURL": "https://github.com/sinlov/drone-file-browser-plugin.git",
+    "HttpUrl": "https://github.com/sinlov/drone-file-browser-plugin.git",
+    "SshUrl": "git@sinlov:drone-file-browser-plugin/github.com.git",
+    "Host": "github.com",
+    "HostName": "github.com"
+  },
+  "Build": {
+    "WorkSpace": "/Users/sinlov/go/src/github.com/sinlov/drone-info-tools/drone_info",
+    "Status": "success",
+    "Number": 1,
+    "Tag": "",
+    "Branch": "main",
+    "SourceBranch": "",
+    "TargetBranch": "",
+    "Link": "https://drone.company.com/sinlov/drone-file-browser-plugin/1",
+    "Event": "push",
+    "StartAt": 1674531206,
+    "FinishedAt": 1674532206,
+    "PR": "",
+    "DeployTo": "",
+    "FailedStages": "build,test",
+    "FailedSteps": "backend,frontend"
+  },
+  "Commit": {
+    "Link": "https://github.com/sinlov/drone-file-browser-plugin.git/commit/68e3d62dd69f06077a243a1db1460109377add64",
+    "Branch": "main",
+    "Message": "mock message commit\nmore line\nand more line\r\n",
+    "Sha": "68e3d62dd69f06077a243a1db1460109377add64",
+    "Ref": "refs/heads/main",
+    "Author": {
+      "Username": "sinlov",
+      "Email": "sinlovgmppt@gmail.com",
+      "Name": "sinlov",
+      "Avatar": ""
+    }
+  },
+  "Stage": {
+    "StartedAt": 1674531206,
+    "StartedTime": "2023-01-24-11-33-26",
+    "FinishedAt": 1674532106,
+    "FinishedTime": "2023-01-24-11-33-26",
+    "Machine": "CI-machine",
+    "Os": "linux",
+    "Arch": "amd64",
+    "Variant": "",
+    "Type": "docker",
+    "Kind": "pipeline",
+    "Name": "build"
+  },
+  "DroneSystem": {
+    "Version": "1.0.0",
+    "Host": "drone.company.com",
+    "HostName": "drone.company.com",
+    "Proto": "https"
+  }
+}

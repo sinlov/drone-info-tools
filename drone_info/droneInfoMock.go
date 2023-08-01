@@ -74,10 +74,15 @@ func MockDroneInfoRefs(status string, refs string) (*Drone, error) {
 }
 
 // MockDroneInfoDroneSystemRefs
+//
 // droneHost like drone.xxx.com:80
+//
 // droneHostName like drone.xxx.com
-// status DroneBuildStatusSuccess DroneBuildStatusFailure
+//
+// status DroneBuildStatusSuccess DroneBuildStatusFailure and default is DroneBuildStatusSuccess
+//
 // refs by: git show-ref --head --dereference
+//
 // @doc https://git-scm.com/docs/git-show-ref
 // like refs/heads/master refs/remotes/* refs/pull/* refs/tags/v1.0.0
 func MockDroneInfoDroneSystemRefs(
@@ -86,6 +91,18 @@ func MockDroneInfoDroneSystemRefs(
 	droneHostName,
 	status string,
 	refs string) (*Drone, error) {
+
+	if droneProto != "http" && droneProto != "https" {
+		return nil, fmt.Errorf("droneProto only support http or https, now is: %s", droneProto)
+	}
+
+	if droneHost == "" {
+		return nil, fmt.Errorf("droneHost not support nil")
+	}
+	if droneHostName == "" {
+		return nil, fmt.Errorf("droneHostName not support nil")
+	}
+
 	if refs == "" {
 		return nil, fmt.Errorf("refs not support nil")
 	}

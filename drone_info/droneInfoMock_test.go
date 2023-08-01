@@ -2,6 +2,7 @@ package drone_info
 
 import (
 	"fmt"
+	"github.com/sebdah/goldie/v2"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
@@ -69,4 +70,138 @@ func TestMockDroneInfoRefs(t *testing.T) {
 	assert.Equal(t, "", droneInfoRefs.Build.Branch)
 	assert.Equal(t, "1.2.3", droneInfoRefs.Build.Tag)
 
+}
+
+func TestMockDroneInfoDroneSystemRefs(t *testing.T) {
+	// mock MockDroneInfoDroneSystemRefs
+	type args struct {
+		droneProto    string
+		droneHost     string
+		droneHostName string
+		status        string
+		refs          string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr error
+	}{
+		{
+			name: "proto error", // testdata/TestMockDroneInfoDroneSystemRefs/sample.golden
+			args: args{
+				droneProto:    "git",
+				droneHost:     "drone.company.com",
+				droneHostName: "drone.company.com",
+				status:        DroneBuildStatusSuccess,
+				refs:          "refs/heads/main",
+			},
+			wantErr: fmt.Errorf("droneProto only support http or https, now is: git"),
+		},
+		{
+			name: "droneHost error",
+			args: args{
+				droneProto:    "http",
+				droneHost:     "",
+				droneHostName: "drone.company.com",
+				status:        DroneBuildStatusSuccess,
+				refs:          "refs/heads/main",
+			},
+			wantErr: fmt.Errorf("droneHost not support nil"),
+		},
+		{
+			name: "droneHostName error",
+			args: args{
+				droneProto:    "http",
+				droneHost:     "drone.company.com",
+				droneHostName: "",
+				status:        DroneBuildStatusSuccess,
+				refs:          "refs/heads/main",
+			},
+			wantErr: fmt.Errorf("droneHostName not support nil"),
+		},
+		{
+			name: "refs empty",
+			args: args{
+				droneProto:    "https",
+				droneHost:     "drone.company.com",
+				droneHostName: "drone.company.com",
+				status:        DroneBuildStatusSuccess,
+			},
+			wantErr: fmt.Errorf("refs not support nil"),
+		},
+		{
+			name: "refs not has refs/",
+			args: args{
+				droneProto:    "https",
+				droneHost:     "drone.company.com",
+				droneHostName: "drone.company.com",
+				status:        DroneBuildStatusSuccess,
+				refs:          "heads/main",
+			},
+			wantErr: fmt.Errorf("refs not has prefix refs/ , now is: heads/main"),
+		},
+		{
+			name: "refs path error",
+			args: args{
+				droneProto:    "https",
+				droneHost:     "drone.company.com",
+				droneHostName: "drone.company.com",
+				status:        DroneBuildStatusSuccess,
+				refs:          "refs/main",
+			},
+			wantErr: fmt.Errorf("refs parase error, now is: refs/main"),
+		},
+		{
+			name: "refs type error",
+			args: args{
+				droneProto:    "https",
+				droneHost:     "drone.company.com",
+				droneHostName: "drone.company.com",
+				status:        DroneBuildStatusSuccess,
+				refs:          "refs/foo/main",
+			},
+			wantErr: fmt.Errorf("not support refsType by refs: refs/foo/main"),
+		},
+		{
+			name: "default", // testdata/TestMockDroneInfoDroneSystemRefs/default.golden
+			args: args{
+				droneProto:    "https",
+				droneHost:     "drone.company.com",
+				droneHostName: "drone.company.com",
+				refs:          "refs/heads/main",
+			},
+		},
+		{
+			name: "sample", // testdata/TestMockDroneInfoDroneSystemRefs/sample.golden
+			args: args{
+				droneProto:    "https",
+				droneHost:     "drone.company.com",
+				droneHostName: "drone.company.com",
+				status:        DroneBuildStatusSuccess,
+				refs:          "refs/heads/main",
+			},
+		},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			g := goldie.New(t,
+				goldie.WithDiffEngine(goldie.ClassicDiff),
+			)
+
+			// do MockDroneInfoDroneSystemRefs
+			gotResult, gotErr := MockDroneInfoDroneSystemRefs(
+				tc.args.droneProto,
+				tc.args.droneHost,
+				tc.args.droneHostName,
+				tc.args.status,
+				tc.args.refs,
+			)
+			assert.Equal(t, tc.wantErr, gotErr)
+			if tc.wantErr != nil {
+				return
+			}
+			// verify MockDroneInfoDroneSystemRefs
+			g.AssertJson(t, t.Name(), gotResult)
+		})
+	}
 }
