@@ -13,7 +13,7 @@
     "HostName": "github.com"
   },
   "Build": {
-    "WorkSpace": "/Users/sinlov/go/src/github.com/sinlov/drone-info-tools/drone_info",
+    "WorkSpace": "",
     "Status": "success",
     "Number": 1,
     "Tag": "",

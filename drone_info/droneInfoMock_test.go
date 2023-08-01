@@ -201,6 +201,9 @@ func TestMockDroneInfoDroneSystemRefs(t *testing.T) {
 				return
 			}
 			// verify MockDroneInfoDroneSystemRefs
+
+			// fix different platform path run error
+			gotResult.Build.WorkSpace = ""
 			g.AssertJson(t, t.Name(), gotResult)
 		})
 	}
