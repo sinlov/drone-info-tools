@@ -8,7 +8,7 @@
     "Scm": "git",
     "RemoteURL": "https://github.com/sinlov/drone-file-browser-plugin.git",
     "HttpUrl": "https://github.com/sinlov/drone-file-browser-plugin.git",
-    "SshUrl": "git@sinlov:drone-file-browser-plugin/github.com.git",
+    "SshUrl": "git@github.com:sinlov/drone-file-browser-plugin.git",
     "Host": "github.com",
     "HostName": "github.com"
   },
@@ -26,14 +26,14 @@
     "FinishedAt": 1674532206,
     "PR": "",
     "DeployTo": "",
-    "FailedStages": "build,test",
-    "FailedSteps": "backend,frontend"
+    "FailedStages": "",
+    "FailedSteps": ""
   },
   "Commit": {
-    "Link": "https://github.com/sinlov/drone-file-browser-plugin.git/commit/68e3d62dd69f06077a243a1db1460109377add64",
+    "Link": "https://github.com/sinlov/drone-file-browser-plugin/commit/f5513d4e409730c28ee51ba85d01031d1e3a4eba",
     "Branch": "main",
     "Message": "mock message commit\nmore line\nand more line\r\n",
-    "Sha": "68e3d62dd69f06077a243a1db1460109377add64",
+    "Sha": "f5513d4e409730c28ee51ba85d01031d1e3a4eba",
     "Ref": "refs/heads/main",
     "Author": {
       "Username": "sinlov",

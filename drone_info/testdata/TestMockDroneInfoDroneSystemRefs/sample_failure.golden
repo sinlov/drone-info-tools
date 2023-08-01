@@ -14,7 +14,7 @@
   },
   "Build": {
     "WorkSpace": "",
-    "Status": "success",
+    "Status": "failure",
     "Number": 1,
     "Tag": "",
     "Branch": "main",
@@ -26,8 +26,8 @@
     "FinishedAt": 1674532206,
     "PR": "",
     "DeployTo": "",
-    "FailedStages": "",
-    "FailedSteps": ""
+    "FailedStages": "build,test",
+    "FailedSteps": "backend,frontend"
   },
   "Commit": {
     "Link": "https://github.com/sinlov/drone-file-browser-plugin/commit/f5513d4e409730c28ee51ba85d01031d1e3a4eba",

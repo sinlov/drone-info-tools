@@ -181,6 +181,16 @@ func TestMockDroneInfoDroneSystemRefs(t *testing.T) {
 				refs:          "refs/heads/main",
 			},
 		},
+		{
+			name: "sample failure", // testdata/TestMockDroneInfoDroneSystemRefs/sample_failure.golden
+			args: args{
+				droneProto:    "https",
+				droneHost:     "drone.company.com",
+				droneHostName: "drone.company.com",
+				status:        DroneBuildStatusFailure,
+				refs:          "refs/heads/main",
+			},
+		},
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {

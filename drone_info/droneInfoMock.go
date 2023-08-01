@@ -18,7 +18,8 @@ const (
 	mockEnvDroneCommitAuthorEmail = "sinlovgmppt@gmail.com"
 	mockEnvDroneRepoOwner         = "sinlov"
 	mockEnvDroneBranch            = "main"
-	mockEnvDroneRemoteUrlBase     = "https://github.com"
+	mockEnvDroneRemoteProto       = "https"
+	mockEnvDroneRemoteHost        = "github.com"
 
 	mockEnvDroneSystemVersion  = "1.0.0"
 	mockEnvDroneSystemHost     = "drone.xxx.com"
@@ -49,7 +50,7 @@ const (
 	mockEnvDroneBuildStatusFailure = "failure"
 
 	mockEnvDroneCommitMessage = "mock message commit\nmore line\nand more line\r\n"
-	mockEnvDroneCommitSha     = "68e3d62dd69f06077a243a1db1460109377add64"
+	mockEnvDroneCommitSha     = "f5513d4e409730c28ee51ba85d01031d1e3a4eba"
 
 	mockEnvFailedStages = "build,test"
 	mockEnvFailedSteps  = "backend,frontend"
@@ -98,10 +99,63 @@ func MockDroneInfoDroneSystemRefs(
 	droneHost,
 	droneHostName,
 	status string,
-	refs string) (*Drone, error) {
+	refs string,
+) (*Drone, error) {
+	return MockDroneInfoByRefsAndNumber(
+		droneProto,
+		droneHost,
+		droneHostName,
+		mockEnvDroneRemoteProto,
+		mockEnvDroneRemoteHost,
+		mockEnvDroneRepoOwner,
+		mockEnvDroneRepo,
+		status,
+		refs,
+		mockEnvDroneBuildNumber,
+	)
+}
+
+// MockDroneInfoByRefsAndNumber
+//
+// droneHost like drone.xxx.com:80
+//
+// droneHostName like drone.xxx.com
+//
+// droneRemoteProto like http or https
+//
+// droneRemoteHost like github.com
+//
+// owner like sinlov
+//
+// repoName like drone-file-browser-plugin
+//
+// status DroneBuildStatusSuccess DroneBuildStatusFailure and default is DroneBuildStatusSuccess
+//
+// refs by: git show-ref --head --dereference
+//
+// notes: this method mock time use time.UTC
+//
+// @doc https://git-scm.com/docs/git-show-ref
+// like refs/heads/master refs/remotes/* refs/pull/* refs/tags/v1.0.0
+func MockDroneInfoByRefsAndNumber(
+	droneProto,
+	droneHost,
+	droneHostName string,
+	droneRemoteProto,
+	droneRemoteHost,
+	owner,
+	repoName string,
+	status string,
+	refs string,
+	buildNumber uint64,
+) (*Drone, error) {
 
 	if droneProto != "http" && droneProto != "https" {
 		return nil, fmt.Errorf("droneProto only support http or https, now is: %s", droneProto)
+	}
+
+	if droneRemoteProto != "http" && droneRemoteProto != "https" {
+		return nil, fmt.Errorf("droneRemoteProto only support http or https, now is: %s", droneRemoteProto)
 	}
 
 	if droneHost == "" {
@@ -129,12 +183,10 @@ func MockDroneInfoDroneSystemRefs(
 
 	workspace, _ := getCurrentFolderPath()
 
-	owner := mockEnvDroneRepoOwner
 	email := mockEnvDroneCommitAuthorEmail
-	repoName := mockEnvDroneRepo
-	repoUrl := fmt.Sprintf("%s/%s/%s", mockEnvDroneRemoteUrlBase, owner, repoName)
-	repoHttpUrl := fmt.Sprintf("%s/%s/%s.git", mockEnvDroneRemoteUrlBase, owner, repoName)
-	repoSshUrl := fmt.Sprintf("git@%s:%s/%s.git", owner, repoName, "github.com")
+	repoUrl := fmt.Sprintf("%s://%s/%s/%s", droneRemoteProto, droneRemoteHost, owner, repoName)
+	repoHttpUrl := fmt.Sprintf("%s://%s/%s/%s.git", droneRemoteProto, droneRemoteHost, owner, repoName)
+	repoSshUrl := fmt.Sprintf("git@%s:%s/%s.git", droneRemoteHost, owner, repoName)
 	repoHost := ""
 	repoHostName := ""
 	parse, err := url.Parse(repoHttpUrl)
@@ -148,16 +200,15 @@ func MockDroneInfoDroneSystemRefs(
 	stageFinishedTime := time.Unix(int64(stageStartT), 0).In(time.UTC).Format(DroneTimeFormatDefault)
 	commitSHA := mockEnvDroneCommitSha
 	droneBaseUrl := fmt.Sprintf("%s://%s", droneProto, droneHost)
-	buildNumber := mockEnvDroneBuildNumber
 
 	var drone = Drone{
 		//  repo info
 		Repo: Repo{
 			Link:      repoUrl,
 			ShortName: repoName,
-			GroupName: mockEnvDroneRepoOwner,
+			GroupName: owner,
 			FullName:  fmt.Sprintf("%s/%s", owner, repoName),
-			OwnerName: mockEnvDroneRepoOwner,
+			OwnerName: owner,
 			Scm:       mockEnvDroneRepoScm,
 			RemoteURL: repoHttpUrl,
 			HttpUrl:   repoHttpUrl,
@@ -172,17 +223,16 @@ func MockDroneInfoDroneSystemRefs(
 			Number:       buildNumber,
 			Tag:          mockEnvDroneTag,
 			TargetBranch: mockEnvDroneTargetBranch,
+			SourceBranch: mockEnvDroneSourceBranch,
 			Link:         fmt.Sprintf("%s/%s/%s/%d", droneBaseUrl, owner, repoName, buildNumber),
 			Event:        mockEnvDroneBuildEvent,
 			StartAt:      mockEnvDroneBuildStarted,
 			FinishedAt:   mockEnvDroneBuildFinished,
 			PR:           "",
 			DeployTo:     "",
-			FailedStages: mockEnvFailedStages,
-			FailedSteps:  mockEnvFailedSteps,
 		},
 		Commit: Commit{
-			Link:    fmt.Sprintf("%s/commit/%s", repoHttpUrl, commitSHA),
+			Link:    fmt.Sprintf("%s/commit/%s", repoUrl, commitSHA),
 			Message: mockEnvDroneCommitMessage,
 			Sha:     commitSHA,
 			Ref:     refs,
@@ -233,7 +283,10 @@ func MockDroneInfoDroneSystemRefs(
 
 	}
 
-	//branch := mockEnvDroneCommitBranch
+	if drone.Build.Status != DroneBuildStatusSuccess {
+		drone.Build.FailedStages = mockEnvFailedStages
+		drone.Build.FailedSteps = mockEnvFailedSteps
+	}
 
 	return &drone, nil
 }
@@ -246,9 +299,9 @@ func MockDroneInfoEnvFull(debug bool) {
 	owner := mockEnvDroneRepoOwner
 	email := mockEnvDroneCommitAuthorEmail
 	repoName := mockEnvDroneRepo
-	repoUrl := fmt.Sprintf("%s/%s/%s", mockEnvDroneRemoteUrlBase, owner, repoName)
-	repoHttpUrl := fmt.Sprintf("%s/%s/%s.git", mockEnvDroneRemoteUrlBase, owner, repoName)
-	repoSshUrl := fmt.Sprintf("git@%s:%s/%s.git", owner, repoName, "github.com")
+	repoUrl := fmt.Sprintf("%s://%s/%s/%s", mockEnvDroneRemoteProto, mockEnvDroneRemoteHost, owner, repoName)
+	repoHttpUrl := fmt.Sprintf("%s://%s/%s/%s.git", mockEnvDroneRemoteProto, mockEnvDroneRemoteHost, owner, repoName)
+	repoSshUrl := fmt.Sprintf("git@%s:%s/%s.git", mockEnvDroneRemoteHost, owner, repoName)
 
 	commitSHA := mockEnvDroneCommitSha
 	branch := mockEnvDroneBranch
