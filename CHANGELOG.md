@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [convention-change-log](https://github.com/convention-change/convention-change-log) for commit guidelines.
 
+## [1.27.0](https://github.com/sinlov/drone-info-tools/compare/1.26.0...v1.27.0) (2023-08-01)
+
+### ✨ Features
+
+* add drone_info.MockDroneInfoByRefsAndNumber to mock more info ([f8ac8472](https://github.com/sinlov/drone-info-tools/commit/f8ac84720e5ca5436761e349d96048f184f5db6b))
+
 ## [1.26.0](https://github.com/sinlov/drone-info-tools/compare/1.25.0...v1.26.0) (2023-08-01)
 
 ### 🐛 Bug Fixes
