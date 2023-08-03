@@ -280,8 +280,9 @@ func MockDroneInfoByRefsAndNumber(
 		drone.Build.Branch = refsContent
 	default:
 		return nil, fmt.Errorf("not support refsType by refs: %s", refs)
-
 	}
+
+	drone.Build.RepoBranch = drone.Build.Branch
 
 	if drone.Build.Status != DroneBuildStatusSuccess {
 		drone.Build.FailedStages = mockEnvFailedStages
@@ -336,6 +337,7 @@ func MockDroneInfoEnvFull(debug bool) {
 	setEnvStr(EnvDroneCommitAuthorEmail, email)
 	setEnvStr(EnvDroneCommitLink, fmt.Sprintf("%s/commit/%s", repoUrl, commitSHA))
 	setEnvStr(EnvDroneBranch, branch)
+	setEnvStr(EnvDroneRepoBranch, branch)
 	setEnvStr(EnvDroneCommitBranch, branch)
 	setEnvStr(EnvDroneCommitMessage, mockEnvDroneCommitMessage)
 	setEnvStr(EnvDroneCommitSha, commitSHA)
