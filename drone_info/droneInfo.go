@@ -47,6 +47,7 @@ const (
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-repo/
 	EnvDroneRepo     = "DRONE_REPO"
 	EnvDroneRepoName = "DRONE_REPO_NAME"
+
 	// EnvDroneRepoLink
 	// by env:DRONE_REPO_LINK
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-repo-link/
@@ -95,6 +96,11 @@ const (
 	// Provides the target branch for the push or pull request. This value may be empty for tag events.
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-branch/
 	EnvDroneBranch = "DRONE_BRANCH"
+
+	// EnvDroneRepoBranch
+	//	Provides the default repository branch for the current running build
+	// @doc https://docs.drone.io/pipeline/environment/reference/drone-repo-branch/
+	EnvDroneRepoBranch = "DRONE_REPO_BRANCH"
 
 	// EnvDroneSourceBranch
 	//
@@ -264,6 +270,12 @@ type (
 		// Provides the target branch for the push or pull request. This value may be empty for tag events.
 		// @doc https://docs.drone.io/pipeline/environment/reference/drone-branch/
 		Branch string
+
+		// RepoBranch
+		//	by env:DRONE_REPO_BRANCH
+		//	Provides the default repository branch for the current running build
+		// @doc https://docs.drone.io/pipeline/environment/reference/drone-repo-branch/
+		RepoBranch string
 
 		// SourceBranch
 		// by env:DRONE_SOURCE_BRANCH
