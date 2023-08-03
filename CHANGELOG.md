@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [convention-change-log](https://github.com/convention-change/convention-change-log) for commit guidelines.
 
+## [1.28.0](https://github.com/sinlov/drone-info-tools/compare/1.27.0...v1.28.0) (2023-08-03)
+
+### ✨ Features
+
+* add drone_info.EnvDroneRepoBranch and Dron.Build.RepoBranch support ([b22948a8](https://github.com/sinlov/drone-info-tools/commit/b22948a84fa7ec21769be3966093b8c2f342885a))
+
 ## [1.27.0](https://github.com/sinlov/drone-info-tools/compare/1.26.0...v1.27.0) (2023-08-01)
 
 ### ✨ Features
