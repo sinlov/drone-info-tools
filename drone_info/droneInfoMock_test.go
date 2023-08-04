@@ -73,6 +73,7 @@ func TestMockDroneInfoRefs(t *testing.T) {
 }
 
 func TestMockDroneInfoDroneSystemRefs(t *testing.T) {
+
 	// mock MockDroneInfoDroneSystemRefs
 	type args struct {
 		droneProto    string
@@ -207,6 +208,9 @@ func TestMockDroneInfoDroneSystemRefs(t *testing.T) {
 			g := goldie.New(t,
 				goldie.WithDiffEngine(goldie.ClassicDiff),
 			)
+
+			// fix this case not pass
+			setEnvBool(EnvDroneBuildDebug, false)
 
 			// do MockDroneInfoDroneSystemRefs
 			gotResult, gotErr := MockDroneInfoDroneSystemRefs(

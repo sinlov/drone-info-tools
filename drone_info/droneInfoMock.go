@@ -185,7 +185,7 @@ func MockDroneInfoByRefsAndNumber(
 
 	workspace, _ := getCurrentFolderPath()
 
-	email := mockEnvDroneCommitAuthorEmail
+	email := fetchOsEnvStr(EnvDroneCommitAuthorEmail, mockEnvDroneCommitAuthorEmail)
 	repoUrl := fmt.Sprintf("%s://%s/%s/%s", droneRemoteProto, droneRemoteHost, owner, repoName)
 	repoHttpUrl := fmt.Sprintf("%s://%s/%s/%s.git", droneRemoteProto, droneRemoteHost, owner, repoName)
 	repoSshUrl := fmt.Sprintf("git@%s:%s/%s.git", droneRemoteHost, owner, repoName)
@@ -221,16 +221,16 @@ func MockDroneInfoByRefsAndNumber(
 		//  build info
 		Build: Build{
 			WorkSpace:    workspace,
-			BuildDebug:   false,
-			Trigger:      mockEnvDroneBuildTrigger,
+			BuildDebug:   fetchOsEnvBool(EnvDroneBuildDebug, false),
+			Trigger:      fetchOsEnvStr(EnvDroneBuildTrigger, mockEnvDroneBuildTrigger),
 			Status:       status,
 			Number:       buildNumber,
-			RepoBranch:   mockEnvDroneBranch,
-			Tag:          mockEnvDroneTag,
-			TargetBranch: mockEnvDroneTargetBranch,
-			SourceBranch: mockEnvDroneSourceBranch,
+			RepoBranch:   fetchOsEnvStr(EnvDroneBranch, mockEnvDroneBranch),
+			Tag:          fetchOsEnvStr(EnvDroneTag, mockEnvDroneTag),
+			TargetBranch: fetchOsEnvStr(EnvDroneTargetBranch, mockEnvDroneTargetBranch),
+			SourceBranch: fetchOsEnvStr(EnvDroneSourceBranch, mockEnvDroneSourceBranch),
 			Link:         fmt.Sprintf("%s/%s/%s/%d", droneBaseUrl, owner, repoName, buildNumber),
-			Event:        mockEnvDroneBuildEvent,
+			Event:        fetchOsEnvStr(EnvDroneBuildEvent, mockEnvDroneBuildEvent),
 			CreatedAt:    mockEnvDroneBuildCreated,
 			StartAt:      mockEnvDroneBuildStarted,
 			FinishedAt:   mockEnvDroneBuildFinished,
@@ -240,7 +240,7 @@ func MockDroneInfoByRefsAndNumber(
 		},
 		Commit: Commit{
 			Link:    fmt.Sprintf("%s/commit/%s", repoUrl, commitSHA),
-			Message: mockEnvDroneCommitMessage,
+			Message: fetchOsEnvStr(EnvDroneCommitMessage, mockEnvDroneCommitMessage),
 			Sha:     commitSHA,
 			Ref:     refs,
 			Author: CommitAuthor{
@@ -255,16 +255,16 @@ func MockDroneInfoByRefsAndNumber(
 			StartedTime:  stageStartTime,
 			FinishedAt:   stageFinishedT,
 			FinishedTime: stageFinishedTime,
-			Machine:      mockEnvDroneStageMachine,
-			Os:           mockEnvDroneStageOs,
-			Arch:         mockEnvDroneStageArch,
-			Variant:      mockEnvDroneStageVariant,
-			Type:         mockEnvDroneStageType,
-			Kind:         mockEnvDroneStageKind,
-			Name:         mockEnvDroneStageName,
+			Machine:      fetchOsEnvStr(EnvDroneStageMachine, mockEnvDroneStageMachine),
+			Os:           fetchOsEnvStr(EnvDroneStageOs, mockEnvDroneStageOs),
+			Arch:         fetchOsEnvStr(EnvDroneStageArch, mockEnvDroneStageArch),
+			Variant:      fetchOsEnvStr(EnvDroneStageVariant, mockEnvDroneStageVariant),
+			Type:         fetchOsEnvStr(EnvDroneStageType, mockEnvDroneStageType),
+			Kind:         fetchOsEnvStr(EnvDroneStageKind, mockEnvDroneStageKind),
+			Name:         fetchOsEnvStr(EnvDroneStageName, mockEnvDroneStageName),
 		},
 		DroneSystem: DroneSystem{
-			Version:          mockEnvDroneSystemVersion,
+			Version:          fetchOsEnvStr(EnvDroneSystemVersion, mockEnvDroneSystemVersion),
 			Host:             droneHost,
 			HostName:         droneHostName,
 			Proto:            droneProto,
@@ -408,6 +408,29 @@ func setEnvU64(key string, val uint64) {
 	if err != nil {
 		log.Fatalf("set env key [%v] uint64 err: %v", key, err)
 	}
+}
+
+// fetchOsEnvBool
+//
+//	fetch os env by key.
+//	if not found will return devValue.
+//	return env not same as true (will be lowercase, so TRUE is same)
+func fetchOsEnvBool(key string, devValue bool) bool {
+	if os.Getenv(key) == "" {
+		return devValue
+	}
+	return strings.ToLower(os.Getenv(key)) == "true"
+}
+
+// fetchOsEnvStr
+//
+//	fetch os env by key.
+//	return not found will return devValue.
+func fetchOsEnvStr(key, devValue string) string {
+	if os.Getenv(key) == "" {
+		return devValue
+	}
+	return os.Getenv(key)
 }
 
 // getCurrentFolderPath can get run path this golang dir
