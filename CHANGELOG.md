@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [convention-change-log](https://github.com/convention-change/convention-change-log) for commit guidelines.
 
+## [1.29.0](https://github.com/sinlov/drone-info-tools/compare/1.28.0...v1.29.0) (2023-08-04)
+
+### ✨ Features
+
+* add drone_info.NameCliStepsDebug and Drone.Build.BuildDebug for support build ([beaabb2d](https://github.com/sinlov/drone-info-tools/commit/beaabb2d579bb930ed7cfa0054442f09b29a635e))
+
 ## [1.28.0](https://github.com/sinlov/drone-info-tools/compare/1.27.0...v1.28.0) (2023-08-03)
 
 ### ✨ Features
