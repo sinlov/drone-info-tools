@@ -64,6 +64,17 @@ func DroneInfoUrfaveCliFlag() []cli.Flag {
 			Usage:   "drone’s working directory for a pipeline",
 			EnvVars: []string{drone_info.EnvDroneBuildWorkSpace},
 		},
+		&cli.BoolFlag{
+			Name:    drone_info.NameCliStepsDebug,
+			Usage:   "Provides the build debug flag. This value is true when the build is open debug mode",
+			EnvVars: []string{drone_info.EnvDroneBuildDebug},
+		},
+		&cli.StringFlag{
+			Name:    "build.trigger",
+			Usage:   "The source of the trigger for the build",
+			Value:   "success",
+			EnvVars: []string{drone_info.EnvDroneBuildTrigger},
+		},
 		&cli.StringFlag{
 			Name:    "build.status",
 			Usage:   "build status",
@@ -86,6 +97,11 @@ func DroneInfoUrfaveCliFlag() []cli.Flag {
 			EnvVars: []string{drone_info.EnvDroneBranch},
 		},
 		&cli.StringFlag{
+			Name:    "build.repo_branch",
+			Usage:   "Provides the target branch for the push or pull request. This value may be empty for tag events.",
+			EnvVars: []string{drone_info.EnvDroneRepoBranch},
+		},
+		&cli.StringFlag{
 			Name:    "build.source_branch",
 			Usage:   "the source branch for the pull request. This environment variable can be used in conjunction with the target branch variable to get the pull request base and head branch.",
 			EnvVars: []string{drone_info.EnvDroneSourceBranch},
@@ -106,6 +122,11 @@ func DroneInfoUrfaveCliFlag() []cli.Flag {
 			EnvVars: []string{drone_info.EnvDroneBuildEvent},
 		},
 		&cli.Uint64Flag{
+			Name:    "build.created",
+			Usage:   "build created",
+			EnvVars: []string{drone_info.EnvDroneBuildCreated},
+		},
+		&cli.Uint64Flag{
 			Name:    "build.started",
 			Usage:   "build started",
 			EnvVars: []string{drone_info.EnvDroneBuildStarted},
@@ -117,8 +138,13 @@ func DroneInfoUrfaveCliFlag() []cli.Flag {
 		},
 		&cli.StringFlag{
 			Name:    "pull.request",
-			Usage:   "pull request",
+			Usage:   "Provides the pull request number for the current running build. If the build is not a pull request the variable is empty",
 			EnvVars: []string{drone_info.EnvDronePR},
+		},
+		&cli.StringFlag{
+			Name:    "build.pr_action",
+			Usage:   "Provides the action that triggered the pipeline execution. Use this value to differentiate between the pull request being opened vs synchronized.",
+			EnvVars: []string{drone_info.EnvDroneBuildAction},
 		},
 		&cli.StringFlag{
 			Name:    "deploy.to",
@@ -135,7 +161,6 @@ func DroneInfoUrfaveCliFlag() []cli.Flag {
 			Usage:   "Provides a comma-separate list of failed pipeline steps",
 			EnvVars: []string{drone_info.EnvDroneFailedSteps},
 		},
-
 		&cli.StringFlag{
 			Name:    "commit.author.username",
 			Usage:   "Provides the commit author name for the current running build. Note this is a user-defined value and may be empty or inaccurate",
@@ -194,6 +219,7 @@ func DroneInfoUrfaveCliFlag() []cli.Flag {
 			Usage:   "stage finished",
 			EnvVars: []string{drone_info.EnvDroneStageFinished},
 		},
+
 		&cli.StringFlag{
 			Name:    "stage.machine",
 			Usage:   "stage machine",
@@ -251,6 +277,11 @@ func DroneInfoUrfaveCliFlag() []cli.Flag {
 			Usage:   "Provides the protocol used by the Drone server. This can be combined with the hostname to construct to the server url.",
 			EnvVars: []string{drone_info.EnvDroneSystemProto},
 		},
+		&cli.BoolFlag{
+			Name:    "drone.system.debug",
+			Usage:   "Optional boolean value. Enables debug level logging",
+			EnvVars: []string{drone_info.EnvDroneSystemDebug},
+		},
 		// droneInfo end
 	}
 
@@ -289,17 +320,22 @@ func UrfaveCliBindDroneInfo(c *cli.Context) drone_info.Drone {
 		//  drone_info.Build
 		Build: drone_info.Build{
 			WorkSpace:    c.String("build.workspace"),
+			BuildDebug:   c.Bool(drone_info.NameCliStepsDebug),
+			Trigger:      c.String("build.trigger"),
 			Status:       c.String("build.status"),
 			Number:       c.Uint64("build.number"),
 			Tag:          c.String("build.tag"),
 			Branch:       c.String("build.branch"),
+			RepoBranch:   c.String("build.repo_branch"),
 			SourceBranch: c.String("build.source_branch"),
 			TargetBranch: c.String("build.target_branch"),
 			Link:         c.String("build.link"),
 			Event:        c.String("build.event"),
+			CreatedAt:    c.Uint64("build.created"),
 			StartAt:      c.Uint64("build.started"),
 			FinishedAt:   c.Uint64("build.finished"),
 			PR:           c.String("pull.request"),
+			PRAction:     c.String("build.pr_action"),
 			DeployTo:     c.String("deploy.to"),
 			FailedStages: c.String("failed.stages"),
 			FailedSteps:  c.String("failed.steps"),
@@ -331,10 +367,11 @@ func UrfaveCliBindDroneInfo(c *cli.Context) drone_info.Drone {
 			Name:         c.String("stage.name"),
 		},
 		DroneSystem: drone_info.DroneSystem{
-			Version:  c.String("drone.system.version"),
-			Host:     c.String("drone.system.host"),
-			HostName: c.String("drone.system.hostname"),
-			Proto:    c.String("drone.system.proto"),
+			Version:          c.String("drone.system.version"),
+			Host:             c.String("drone.system.host"),
+			HostName:         c.String("drone.system.hostname"),
+			Proto:            c.String("drone.system.proto"),
+			DroneSystemDebug: c.Bool("drone.system.debug"),
 		},
 	}
 	return drone

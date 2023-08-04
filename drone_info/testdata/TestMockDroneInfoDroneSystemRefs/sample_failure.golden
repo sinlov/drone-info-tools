@@ -14,6 +14,8 @@
   },
   "Build": {
     "WorkSpace": "",
+    "BuildDebug": false,
+    "Trigger": "@hook",
     "Status": "failure",
     "Number": 1,
     "Tag": "",
@@ -23,9 +25,11 @@
     "TargetBranch": "",
     "Link": "https://drone.company.com/sinlov/drone-file-browser-plugin/1",
     "Event": "push",
+    "CreatedAt": 1674531200,
     "StartAt": 1674531206,
     "FinishedAt": 1674532206,
     "PR": "",
+    "PRAction": "",
     "DeployTo": "",
     "FailedStages": "build,test",
     "FailedSteps": "backend,frontend"
@@ -60,6 +64,7 @@
     "Version": "1.0.0",
     "Host": "drone.company.com",
     "HostName": "drone.company.com",
-    "Proto": "https"
+    "Proto": "https",
+    "DroneSystemDebug": false
   }
 }

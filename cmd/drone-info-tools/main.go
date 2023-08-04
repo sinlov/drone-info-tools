@@ -4,27 +4,22 @@ package main
 
 import (
 	_ "embed"
-	"flag"
 	resource "github.com/sinlov/drone-info-tools"
+	"github.com/sinlov/drone-info-tools/cmd/cli"
 	"github.com/sinlov/drone-info-tools/drone_log"
-	"github.com/sinlov/drone-info-tools/drone_urfave_cli_v2"
 	"github.com/sinlov/drone-info-tools/pkgJson"
-	"log"
+	"github.com/sinlov/drone-info-tools/template"
+	"os"
 )
-
-const (
-	Name = "drone-info-tools"
-)
-
-var cliVersion *string
 
 func main() {
 	pkgJson.InitPkgJsonContent(resource.PackageJson)
-	cliVersion = flag.String("version", pkgJson.GetPackageJsonVersionGoStyle(), "show version of this cli")
+	template.RegisterSettings(template.DefaultFunctions)
 
-	flag.Parse()
-	log.Printf("=> now version %v", *cliVersion)
-	drone_log.ShowLogLineNo(true)
-	drone_log.Infof("=> now version %v", *cliVersion)
-	drone_urfave_cli_v2.DroneInfoUrfaveCliFlag()
+	app := cli.NewCliApp()
+
+	// app run as urfave
+	if err := app.Run(os.Args); nil != err {
+		drone_log.Warnf("run err: %v", err)
+	}
 }
