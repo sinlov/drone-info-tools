@@ -1,6 +1,12 @@
 package drone_info
 
 const (
+	NameCliStepsDebug = "build.debug"
+
+	// EnvKeyPluginDebug
+	// Provides the plugin debug flag. This value is true when the plugin is open debug mode
+	EnvKeyPluginDebug = "PLUGIN_DEBUG"
+
 	DroneBuildStatusSuccess = "success"
 	DroneBuildStatusFailure = "failure"
 	DroneBuildStatusError   = "error"
@@ -9,10 +15,6 @@ const (
 	// DroneTimeFormatDefault
 	// default time format for Stage.StartedTime and Stage.FinishedTime
 	DroneTimeFormatDefault = "2006-01-02-03-04-05"
-
-	// EnvKeyPluginDebug
-	// Provides the plugin debug flag. This value is true when the plugin is open debug mode
-	EnvKeyPluginDebug = "PLUGIN_DEBUG"
 
 	// EnvDroneCommitAuthorName
 	// Provides the commit author name for the current running build. Note this is a user-defined value and may be empty or inaccurate.
@@ -72,29 +74,67 @@ const (
 	// drone’s working directory for a pipeline
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-workspace/
 	EnvDroneBuildWorkSpace = "DRONE_WORKSPACE"
-	EnvDroneBuildStatus    = "DRONE_BUILD_STATUS"
-	EnvDroneBuildNumber    = "DRONE_BUILD_NUMBER"
-	EnvDroneBuildLink      = "DRONE_BUILD_LINK"
-	// EnvDroneBuildEvent
-	//
-	// Provides the event that triggered the pipeline execution.
-	//
-	// This value will be push, pull_request, tag, promote, cron, custom.
-	//
-	// @doc https://docs.drone.io/pipeline/environment/reference/drone-build-event/
-	EnvDroneBuildEvent    = "DRONE_BUILD_EVENT"
-	EnvDroneBuildStarted  = "DRONE_BUILD_STARTED"
-	EnvDroneBuildFinished = "DRONE_BUILD_FINISHED"
+
+	// EnvDroneBuildDebug
+	//	by env: DRONE_BUILD_DEBUG
+	//	Provides the build debug flag. This value is true when the build is open debug mode
+	//	this not has official doc, just use build steps debug will change this env to true
+	EnvDroneBuildDebug = "DRONE_BUILD_DEBUG"
+
+	// EnvDroneBuildTrigger
+	//	by env: DRONE_BUILD_TRIGGER
+	//	webhook (@hook)
+	//	The source of the trigger for the build.
+	//	DRONE_BUILD_TRIGGER=root
+	//	DRONE_BUILD_TRIGGER=f.bar
+	//	DRONE_BUILD_TRIGGER=@hook
+	// @doc https://docs.drone.io/pipeline/environment/reference/drone-build-trigger/
+	EnvDroneBuildTrigger = "DRONE_BUILD_TRIGGER"
+
+	// EnvDroneBuildStatus
+	//	by env: DRONE_BUILD_STATUS
+	//	success or failure
+	//	Provides the status for the current running build. If build pipelines and build steps are passing, the build status defaults to success.
+	// @doc https://docs.drone.io/pipeline/environment/reference/drone-build-status/
+	EnvDroneBuildStatus = "DRONE_BUILD_STATUS"
+
+	// EnvDroneBuildNumber
+	//	by env: DRONE_BUILD_NUMBER
+	//	Provides the build number for the current running build. Please note that this variable is not available for substitution or template injection.
+	// @doc https://docs.drone.io/pipeline/environment/reference/drone-build-number/
+	EnvDroneBuildNumber = "DRONE_BUILD_NUMBER"
 
 	// EnvDroneTag
 	// by env: DRONE_TAG
 	// Provides the tag for the current running build. This value is only populated for tag events and promotion events that are derived from tags.
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-tag/
 	EnvDroneTag = "DRONE_TAG"
+
+	// EnvDroneBuildCreated
+	//	by env: DRONE_BUILD_CREATED
+	//	Provides the unix timestamp for when the build object was created by the system.
+	//	build created at ( unix timestamp )
+	//  @doc https://docs.drone.io/pipeline/environment/reference/drone-build-created/
+	EnvDroneBuildCreated = "DRONE_BUILD_CREATED"
+
+	// EnvDroneBuildStarted
+	//	by env: DRONE_BUILD_STARTED
+	//	Provides the unix timestamp for when the build was started by the system.
+	//	build created at ( unix timestamp )
+	//  @doc https://docs.drone.io/pipeline/environment/reference/drone-build-started/
+	EnvDroneBuildStarted = "DRONE_BUILD_STARTED"
+
+	// EnvDroneBuildFinished
+	//	by env: DRONE_BUILD_FINISHED
+	//	Provides the unix timestamp for when the build is finished. A running build cannot have a finish timestamp, therefore, the system always sets this value to the current timestamp.
+	//	build finished at ( unix timestamp )
+	//  @doc https://docs.drone.io/pipeline/environment/reference/drone-build-finished/
+	EnvDroneBuildFinished = "DRONE_BUILD_FINISHED"
+
 	// EnvDroneBranch
-	// by env: DRONE_BRANCH
-	// Provides the target branch for the push or pull request. This value may be empty for tag events.
-	// @doc https://docs.drone.io/pipeline/environment/reference/drone-branch/
+	//	by env: DRONE_BRANCH
+	//	Provides the target branch for the push or pull request. This value may be empty for tag events.
+	//	@doc https://docs.drone.io/pipeline/environment/reference/drone-branch/
 	EnvDroneBranch = "DRONE_BRANCH"
 
 	// EnvDroneRepoBranch
@@ -110,6 +150,7 @@ const (
 	//
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-source-branch/
 	EnvDroneSourceBranch = "DRONE_SOURCE_BRANCH"
+
 	// EnvDroneTargetBranch
 	//
 	// Provides the target branch for the push or pull request. This value may be empty for tag events.
@@ -118,13 +159,30 @@ const (
 	//
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-target-branch/
 	EnvDroneTargetBranch = "DRONE_TARGET_BRANCH"
-	// EnvDronePR
+
+	// EnvDroneBuildLink
+	//	by env: DRONE_BUILD_LINK
+	//	Provides a deep link the Drone build results. Please note that this variable is not available for substitution or template injection.
+	// @doc https://docs.drone.io/pipeline/environment/reference/drone-build-link/
+	EnvDroneBuildLink = "DRONE_BUILD_LINK"
+
+	// EnvDroneBuildEvent
+	// by env:DRONE_BUILD_EVENT
 	//
-	// Provides the pull request number for the current running build. If the build is not a pull request the variable is empty.
+	//	DRONE_BUILD_EVENT=push
+	//	DRONE_BUILD_EVENT=pull_request
+	//	DRONE_BUILD_EVENT=promote
+	//	DRONE_BUILD_EVENT=rollback
+	//	DRONE_BUILD_EVENT=tag
+	//	DRONE_BUILD_EVENT=cron
+	//	DRONE_BUILD_EVENT=custom
 	//
-	// @doc https://docs.drone.io/pipeline/environment/reference/drone-pull-request/
-	EnvDronePR       = "DRONE_PULL_REQUEST"
-	EnvDroneDeployTo = "DRONE_DEPLOY_TO"
+	// Provides the event that triggered the pipeline execution.
+	//
+	// This value will be push, pull_request, tag, promote, cron, custom.
+	//
+	// @doc https://docs.drone.io/pipeline/environment/reference/drone-build-event/
+	EnvDroneBuildEvent = "DRONE_BUILD_EVENT"
 
 	// EnvDroneStageStarted
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-stage-started/
@@ -132,6 +190,36 @@ const (
 	// EnvDroneStageFinished
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-stage-finished/
 	EnvDroneStageFinished = "DRONE_STAGE_FINISHED"
+
+	// EnvDronePR
+	//	by env: DRONE_PULL_REQUEST
+	// Provides the pull request number for the current running build. If the build is not a pull request the variable is empty.
+	//
+	// @doc https://docs.drone.io/pipeline/environment/reference/drone-pull-request/
+	EnvDronePR = "DRONE_PULL_REQUEST"
+
+	// EnvDroneBuildAction
+	//	by env: DRONE_BUILD_ACTION
+	//	DRONE_BUILD_ACTION=sync
+	//	DRONE_BUILD_ACTION=open
+	//	Provides the action that triggered the pipeline execution. Use this value to differentiate between the pull request being opened vs synchronized.
+	//  @doc https://docs.drone.io/pipeline/environment/reference/drone-build-action/
+	EnvDroneBuildAction = "DRONE_BUILD_ACTION"
+
+	// EnvDroneDeployTo
+	//	by env: DRONE_DEPLOY_TO
+	//	Provides the target deployment environment for the running build. This value is only available to promotion and rollback pipelines.
+	// @doc https://docs.drone.io/pipeline/environment/reference/drone-deploy-to/
+	EnvDroneDeployTo = "DRONE_DEPLOY_TO"
+
+	// EnvDroneFailedStages
+	// by env:DRONE_FAILED_STAGES
+	// @doc https://docs.drone.io/pipeline/environment/reference/drone-failed-stages/
+	EnvDroneFailedStages = "DRONE_FAILED_STAGES"
+	// EnvDroneFailedSteps
+	// by env:DRONE_FAILED_STEPS
+	// @doc https://docs.drone.io/pipeline/environment/reference/drone-failed-steps/
+	EnvDroneFailedSteps = "DRONE_FAILED_STEPS"
 
 	// EnvDroneStageMachine
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-stage-machine/
@@ -158,15 +246,6 @@ const (
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-stage-name/
 	EnvDroneStageName = "DRONE_STAGE_NAME"
 
-	// EnvDroneFailedStages
-	// by env:DRONE_FAILED_STAGES
-	// @doc https://docs.drone.io/pipeline/environment/reference/drone-failed-stages/
-	EnvDroneFailedStages = "DRONE_FAILED_STAGES"
-	// EnvDroneFailedSteps
-	// by env:DRONE_FAILED_STEPS
-	// @doc https://docs.drone.io/pipeline/environment/reference/drone-failed-steps/
-	EnvDroneFailedSteps = "DRONE_FAILED_STEPS"
-
 	// EnvDroneSystemVersion
 	// Provides the version of the Drone server.
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-system-version/
@@ -182,6 +261,13 @@ const (
 	// https or http
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-system-proto/
 	EnvDroneSystemProto = "DRONE_SYSTEM_PROTO"
+
+	// EnvDroneSystemDebug
+	//	Optional boolean value. Enables debug level logging
+	//	by env:DRONE_DEBUG
+	//	notice this not build debug in drone, just print debug log
+	// @doc https://docs.drone.io/runner/ssh/configuration/reference/drone-debug/
+	EnvDroneSystemDebug = "DRONE_DEBUG"
 )
 
 var (
@@ -258,13 +344,42 @@ type (
 		// by env:DRONE_WORKSPACE
 		// @doc https://docs.drone.io/pipeline/environment/reference/drone-workspace/
 		WorkSpace string
-		Status    string //  providers the current build status
-		Number    uint64 //  providers the current build number
+
+		// BuildDebug
+		//	by env: DRONE_BUILD_DEBUG
+		//	Provides the build debug flag. This value is true when the build is open debug mode
+		//	this not has official doc, just use build steps debug will change this env to true
+		BuildDebug bool
+
+		// Trigger
+		//	by env: DRONE_BUILD_TRIGGER
+		//	webhook (@hook)
+		//	The source of the trigger for the build.
+		//	DRONE_BUILD_TRIGGER=root
+		//	DRONE_BUILD_TRIGGER=f.bar
+		//	DRONE_BUILD_TRIGGER=@hook
+		// @doc https://docs.drone.io/pipeline/environment/reference/drone-build-trigger/
+		Trigger string
+
+		// Status
+		//	by env: DRONE_BUILD_STATUS
+		//	success or failure
+		//	Provides the status for the current running build. If build pipelines and build steps are passing, the build status defaults to success.
+		// @doc https://docs.drone.io/pipeline/environment/reference/drone-build-status/
+		Status string
+
+		// Number
+		//	by env: DRONE_BUILD_NUMBER
+		//	Provides the build number for the current running build. Please note that this variable is not available for substitution or template injection.
+		// @doc https://docs.drone.io/pipeline/environment/reference/drone-build-number/
+		Number uint64
+
 		// Branch
 		// by env: DRONE_TAG
 		// Provides the tag for the current running build. This value is only populated for tag events and promotion events that are derived from tags.
 		// @doc https://docs.drone.io/pipeline/environment/reference/drone-tag/
 		Tag string
+
 		// Branch
 		// by env: DRONE_BRANCH
 		// Provides the target branch for the push or pull request. This value may be empty for tag events.
@@ -295,34 +410,80 @@ type (
 		//
 		// @doc https://docs.drone.io/pipeline/environment/reference/drone-target-branch/
 		TargetBranch string
+
 		// Link
-		// by env:DRONE_BUILD_LINK
+		//	by env: DRONE_BUILD_LINK
+		//	Provides a deep link the Drone build results. Please note that this variable is not available for substitution or template injection.
 		// @doc https://docs.drone.io/pipeline/environment/reference/drone-build-link/
 		Link string //  providers the current build link
+
 		// Event
-		// by env:DRONE_BUILD_EVENT
+		//	by env:DRONE_BUILD_EVENT
+		//
+		//	DRONE_BUILD_EVENT=push
+		//	DRONE_BUILD_EVENT=pull_request
+		//	DRONE_BUILD_EVENT=promote
+		//	DRONE_BUILD_EVENT=rollback
+		//	DRONE_BUILD_EVENT=tag
+		//	DRONE_BUILD_EVENT=cron
+		//	DRONE_BUILD_EVENT=custom
 		//
 		// Provides the event that triggered the pipeline execution.
 		//
 		// This value will be push, pull_request, tag, promote, cron, custom.
 		//
 		// @doc https://docs.drone.io/pipeline/environment/reference/drone-build-event/
-		Event      string //  trigger event
-		StartAt    uint64 //  build start at ( unix timestamp )
-		FinishedAt uint64 //  build finish at ( unix timestamp )
+		Event string //  trigger event
+
+		// CreatedAt
+		//	by env: DRONE_BUILD_CREATED
+		//	Provides the unix timestamp for when the build object was created by the system.
+		//	build created at ( unix timestamp )
+		//  @doc https://docs.drone.io/pipeline/environment/reference/drone-build-created/
+		CreatedAt uint64
+
+		// StartedAt
+		//	by env: DRONE_BUILD_STARTED
+		//	Provides the unix timestamp for when the build was started by the system.
+		//	build created at ( unix timestamp )
+		//  @doc https://docs.drone.io/pipeline/environment/reference/drone-build-started/
+		StartAt uint64
+
+		// FinishedAt
+		//	by env: DRONE_BUILD_FINISHED
+		//	Provides the unix timestamp for when the build is finished. A running build cannot have a finish timestamp, therefore, the system always sets this value to the current timestamp.
+		//	build finished at ( unix timestamp )
+		//  @doc https://docs.drone.io/pipeline/environment/reference/drone-build-finished/
+		FinishedAt uint64
+
 		// PR
 		// by env:DRONE_PULL_REQUEST
 		//
 		// Provides the pull request number for the current running build. If the build is not a pull request the variable is empty.
 		//
 		// @doc https://docs.drone.io/pipeline/environment/reference/drone-pull-request/
-		PR       string //  build pull request
+		PR string
+
+		// PRAction
+		//	by env: DRONE_BUILD_ACTION
+		//	DRONE_BUILD_ACTION=sync
+		//	DRONE_BUILD_ACTION=open
+		//	Provides the action that triggered the pipeline execution. Use this value to differentiate between the pull request being opened vs synchronized.
+		//  @doc https://docs.drone.io/pipeline/environment/reference/drone-build-action/
+		PRAction string
+
+		// DeployTo
+		//	by env: DRONE_DEPLOY_TO
+		//	Provides the target deployment environment for the running build. This value is only available to promotion and rollback pipelines.
+		// @doc https://docs.drone.io/pipeline/environment/reference/drone-deploy-to/
 		DeployTo string //  build deploy to
+
 		// FailedStages
 		// by env:DRONE_FAILED_STAGES
 		// Provides a comma-separate list of failed pipeline stages for the current running build.
 		// @doc https://docs.drone.io/pipeline/environment/reference/drone-failed-stages/
 		FailedStages string
+
 		// FailedSteps
 		// by env:DRONE_FAILED_STEPS
 		// Provides a comma-separate list of failed pipeline steps.
@@ -458,6 +619,13 @@ type (
 		// https or http
 		// @doc https://docs.drone.io/pipeline/environment/reference/drone-system-proto/
 		Proto string
+
+		// DroneSystemDebug
+		//	Optional boolean value. Enables debug level logging
+		//	by env:DRONE_DEBUG
+		//	notice this not build debug in drone, just print debug log
+		// @doc https://docs.drone.io/runner/ssh/configuration/reference/drone-debug/
+		DroneSystemDebug bool
 	}
 
 	// Drone drone info

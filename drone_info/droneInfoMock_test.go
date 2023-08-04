@@ -68,7 +68,7 @@ func TestMockDroneInfoRefs(t *testing.T) {
 	assert.Equal(t, mockEnvDroneRepoOwner, droneInfoRefs.Repo.OwnerName)
 	assert.Equal(t, "", droneInfoRefs.Commit.Branch)
 	assert.Equal(t, "", droneInfoRefs.Build.Branch)
-	assert.Equal(t, "1.2.3", droneInfoRefs.Build.Tag)
+	assert.Equal(t, "v1.2.3", droneInfoRefs.Build.Tag)
 
 }
 

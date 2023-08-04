@@ -31,6 +31,7 @@ const (
 
 	mockEnvDroneStageStarted  uint64 = 1674531206
 	mockEnvDroneStageFinished uint64 = 1674532106
+	mockEnvDroneBuildCreated  uint64 = 1674531200
 	mockEnvDroneBuildStarted  uint64 = 1674531206
 	mockEnvDroneBuildFinished uint64 = 1674532206
 	mockEnvDroneBuildNumber   uint64 = 1
@@ -47,6 +48,7 @@ const (
 	mockEnvDroneTargetBranch       = ""
 	mockEnvDroneBuildEvent         = "push"
 	mockEnvDroneBuildStatusSuccess = "success"
+	mockEnvDroneBuildTrigger       = "@hook"
 	mockEnvDroneBuildStatusFailure = "failure"
 
 	mockEnvDroneCommitMessage = "mock message commit\nmore line\nand more line\r\n"
@@ -219,16 +221,21 @@ func MockDroneInfoByRefsAndNumber(
 		//  build info
 		Build: Build{
 			WorkSpace:    workspace,
+			BuildDebug:   false,
+			Trigger:      mockEnvDroneBuildTrigger,
 			Status:       status,
 			Number:       buildNumber,
+			RepoBranch:   mockEnvDroneBranch,
 			Tag:          mockEnvDroneTag,
 			TargetBranch: mockEnvDroneTargetBranch,
 			SourceBranch: mockEnvDroneSourceBranch,
 			Link:         fmt.Sprintf("%s/%s/%s/%d", droneBaseUrl, owner, repoName, buildNumber),
 			Event:        mockEnvDroneBuildEvent,
+			CreatedAt:    mockEnvDroneBuildCreated,
 			StartAt:      mockEnvDroneBuildStarted,
 			FinishedAt:   mockEnvDroneBuildFinished,
 			PR:           "",
+			PRAction:     "",
 			DeployTo:     "",
 		},
 		Commit: Commit{
@@ -257,10 +264,11 @@ func MockDroneInfoByRefsAndNumber(
 			Name:         mockEnvDroneStageName,
 		},
 		DroneSystem: DroneSystem{
-			Version:  mockEnvDroneSystemVersion,
-			Host:     droneHost,
-			HostName: droneHostName,
-			Proto:    droneProto,
+			Version:          mockEnvDroneSystemVersion,
+			Host:             droneHost,
+			HostName:         droneHostName,
+			Proto:            droneProto,
+			DroneSystemDebug: false,
 		},
 	}
 
@@ -268,7 +276,8 @@ func MockDroneInfoByRefsAndNumber(
 	refsContent := refsSplit[1]
 	switch refsType {
 	case "tags":
-		drone.Build.Tag = strings.Replace(refsContent, "v", "", 1)
+		//drone.Build.Tag = strings.Replace(refsContent, "v", "", 1)
+		drone.Build.Tag = refsContent
 		drone.Commit.Branch = ""
 		drone.Build.Branch = ""
 	case "heads":
@@ -319,15 +328,24 @@ func MockDroneInfoEnvFull(debug bool) {
 	setEnvStr(EnvDroneGitSshUrl, repoSshUrl)
 
 	setEnvStr(EnvDroneBuildWorkSpace, workspace)
+	setEnvBool(EnvDroneBuildDebug, debug)
+	setEnvStr(EnvDroneBuildTrigger, mockEnvDroneBuildTrigger)
 	setEnvStr(EnvDroneBuildStatus, mockEnvDroneBuildStatusSuccess)
 	setEnvU64(EnvDroneBuildNumber, mockEnvDroneBuildNumber)
 	setEnvStr(EnvDroneTag, mockEnvDroneTag)
+	setEnvU64(EnvDroneBuildCreated, mockEnvDroneBuildCreated)
+	setEnvU64(EnvDroneBuildStarted, mockEnvDroneBuildStarted)
+	setEnvU64(EnvDroneBuildFinished, mockEnvDroneBuildFinished)
+	setEnvStr(EnvDroneBranch, branch)
+	setEnvStr(EnvDroneRepoBranch, mockEnvDroneBranch)
 	setEnvStr(EnvDroneSourceBranch, mockEnvDroneSourceBranch)
 	setEnvStr(EnvDroneTargetBranch, mockEnvDroneTargetBranch)
 	setEnvStr(EnvDroneBuildLink, fmt.Sprintf("%s/%s/%s/%d", droneBaseUrl, owner, repoName, buildNumber))
 	setEnvStr(EnvDroneBuildEvent, mockEnvDroneBuildEvent)
-	setEnvU64(EnvDroneBuildStarted, mockEnvDroneBuildStarted)
-	setEnvU64(EnvDroneBuildFinished, mockEnvDroneBuildFinished)
+	setEnvU64(EnvDroneStageStarted, mockEnvDroneStageStarted)
+	setEnvU64(EnvDroneStageFinished, mockEnvDroneStageFinished)
+	setEnvStr(EnvDroneDeployTo, "")
+	setEnvStr(EnvDroneBuildAction, "")
 	setEnvStr(EnvDroneFailedStages, "")
 	setEnvStr(EnvDroneFailedSteps, "")
 
@@ -336,15 +354,12 @@ func MockDroneInfoEnvFull(debug bool) {
 	setEnvStr(EnvDroneCommitAuthorAvatar, "")
 	setEnvStr(EnvDroneCommitAuthorEmail, email)
 	setEnvStr(EnvDroneCommitLink, fmt.Sprintf("%s/commit/%s", repoUrl, commitSHA))
-	setEnvStr(EnvDroneBranch, branch)
 	setEnvStr(EnvDroneRepoBranch, branch)
 	setEnvStr(EnvDroneCommitBranch, branch)
 	setEnvStr(EnvDroneCommitMessage, mockEnvDroneCommitMessage)
 	setEnvStr(EnvDroneCommitSha, commitSHA)
 	setEnvStr(EnvDroneCommitRef, fmt.Sprintf("refs/heads/%s", branch))
 
-	setEnvU64(EnvDroneStageStarted, mockEnvDroneStageStarted)
-	setEnvU64(EnvDroneStageFinished, mockEnvDroneStageFinished)
 	setEnvStr(EnvDroneStageMachine, mockEnvDroneStageMachine)
 	setEnvStr(EnvDroneStageOs, mockEnvDroneStageOs)
 	setEnvStr(EnvDroneStageArch, mockEnvDroneStageArch)
