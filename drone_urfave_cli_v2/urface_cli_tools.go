@@ -72,7 +72,7 @@ func DroneInfoUrfaveCliFlag() []cli.Flag {
 		&cli.StringFlag{
 			Name:    "build.trigger",
 			Usage:   "The source of the trigger for the build",
-			Value:   "success",
+			Value:   "",
 			EnvVars: []string{drone_info.EnvDroneBuildTrigger},
 		},
 		&cli.StringFlag{
@@ -190,7 +190,7 @@ func DroneInfoUrfaveCliFlag() []cli.Flag {
 			Name:    "commit.branch",
 			Usage:   "providers the branch for the current build",
 			EnvVars: []string{drone_info.EnvDroneCommitBranch},
-			Value:   "master",
+			Value:   "",
 		},
 		&cli.StringFlag{
 			Name:    "commit.message",

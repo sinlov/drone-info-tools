@@ -95,6 +95,8 @@ const (
 	//	by env: DRONE_BUILD_STATUS
 	//	success or failure
 	//	Provides the status for the current running build. If build pipelines and build steps are passing, the build status defaults to success.
+	//
+	//	Please note this is point in time snapshot. This value may not accurately reflect the overall build status when multiple pipelines are running in parallel.
 	// @doc https://docs.drone.io/pipeline/environment/reference/drone-build-status/
 	EnvDroneBuildStatus = "DRONE_BUILD_STATUS"
 
