@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [convention-change-log](https://github.com/convention-change/convention-change-log) for commit guidelines.
 
+## [1.31.0](https://github.com/sinlov/drone-info-tools/compare/1.30.0...v1.31.0) (2023-08-07)
+
+### ✨ Features
+
+* change DRONE_COMMIT_BRANCH and DRONE_BUILD_TRIGGER default value ([f22c8fa3](https://github.com/sinlov/drone-info-tools/commit/f22c8fa3705b2776d02e0323043d00fd738bbd94))
+
 ## [1.30.0](https://github.com/sinlov/drone-info-tools/compare/1.29.0...v1.30.0) (2023-08-04)
 
 ### ✨ Features
