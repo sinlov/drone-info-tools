@@ -3,6 +3,7 @@ package drone_info
 import (
 	"errors"
 	"fmt"
+	"github.com/sinlov/drone-info-tools/tools/date_kit"
 	"log"
 	"net/url"
 	"os"
@@ -196,10 +197,14 @@ func MockDroneInfoByRefsAndNumber(
 		repoHost = parse.Host
 		repoHostName = parse.Hostname()
 	}
+
+	buildTotalBuildTimeStr := date_kit.DistanceBetweenTimestampSecondHuman(int64(mockEnvDroneBuildCreated), int64(mockEnvDroneBuildFinished))
+
 	stageStartT := mockEnvDroneStageStarted
 	stageStartTime := time.Unix(int64(stageStartT), 0).In(time.UTC).Format(DroneTimeFormatDefault)
 	stageFinishedT := mockEnvDroneStageFinished
 	stageFinishedTime := time.Unix(int64(stageStartT), 0).In(time.UTC).Format(DroneTimeFormatDefault)
+	stageTotalBuildTime := date_kit.DistanceBetweenTimestampSecondHuman(int64(stageStartT), int64(stageFinishedT))
 	commitSHA := mockEnvDroneCommitSha
 	droneBaseUrl := fmt.Sprintf("%s://%s", droneProto, droneHost)
 
@@ -220,23 +225,24 @@ func MockDroneInfoByRefsAndNumber(
 		},
 		//  build info
 		Build: Build{
-			WorkSpace:    workspace,
-			BuildDebug:   fetchOsEnvBool(EnvDroneBuildDebug, false),
-			Trigger:      fetchOsEnvStr(EnvDroneBuildTrigger, mockEnvDroneBuildTrigger),
-			Status:       status,
-			Number:       buildNumber,
-			RepoBranch:   fetchOsEnvStr(EnvDroneBranch, mockEnvDroneBranch),
-			Tag:          fetchOsEnvStr(EnvDroneTag, mockEnvDroneTag),
-			TargetBranch: fetchOsEnvStr(EnvDroneTargetBranch, mockEnvDroneTargetBranch),
-			SourceBranch: fetchOsEnvStr(EnvDroneSourceBranch, mockEnvDroneSourceBranch),
-			Link:         fmt.Sprintf("%s/%s/%s/%d", droneBaseUrl, owner, repoName, buildNumber),
-			Event:        fetchOsEnvStr(EnvDroneBuildEvent, mockEnvDroneBuildEvent),
-			CreatedAt:    mockEnvDroneBuildCreated,
-			StartAt:      mockEnvDroneBuildStarted,
-			FinishedAt:   mockEnvDroneBuildFinished,
-			PR:           "",
-			PRAction:     "",
-			DeployTo:     "",
+			WorkSpace:      workspace,
+			BuildDebug:     fetchOsEnvBool(EnvDroneBuildDebug, false),
+			Trigger:        fetchOsEnvStr(EnvDroneBuildTrigger, mockEnvDroneBuildTrigger),
+			Status:         status,
+			Number:         buildNumber,
+			RepoBranch:     fetchOsEnvStr(EnvDroneBranch, mockEnvDroneBranch),
+			Tag:            fetchOsEnvStr(EnvDroneTag, mockEnvDroneTag),
+			TargetBranch:   fetchOsEnvStr(EnvDroneTargetBranch, mockEnvDroneTargetBranch),
+			SourceBranch:   fetchOsEnvStr(EnvDroneSourceBranch, mockEnvDroneSourceBranch),
+			Link:           fmt.Sprintf("%s/%s/%s/%d", droneBaseUrl, owner, repoName, buildNumber),
+			Event:          fetchOsEnvStr(EnvDroneBuildEvent, mockEnvDroneBuildEvent),
+			CreatedAt:      mockEnvDroneBuildCreated,
+			StartAt:        mockEnvDroneBuildStarted,
+			FinishedAt:     mockEnvDroneBuildFinished,
+			TotalBuildTime: buildTotalBuildTimeStr,
+			PR:             "",
+			PRAction:       "",
+			DeployTo:       "",
 		},
 		Commit: Commit{
 			Link:    fmt.Sprintf("%s/commit/%s", repoUrl, commitSHA),
@@ -251,17 +257,18 @@ func MockDroneInfoByRefsAndNumber(
 			},
 		},
 		Stage: Stage{
-			StartedAt:    stageStartT,
-			StartedTime:  stageStartTime,
-			FinishedAt:   stageFinishedT,
-			FinishedTime: stageFinishedTime,
-			Machine:      fetchOsEnvStr(EnvDroneStageMachine, mockEnvDroneStageMachine),
-			Os:           fetchOsEnvStr(EnvDroneStageOs, mockEnvDroneStageOs),
-			Arch:         fetchOsEnvStr(EnvDroneStageArch, mockEnvDroneStageArch),
-			Variant:      fetchOsEnvStr(EnvDroneStageVariant, mockEnvDroneStageVariant),
-			Type:         fetchOsEnvStr(EnvDroneStageType, mockEnvDroneStageType),
-			Kind:         fetchOsEnvStr(EnvDroneStageKind, mockEnvDroneStageKind),
-			Name:         fetchOsEnvStr(EnvDroneStageName, mockEnvDroneStageName),
+			StartedAt:      stageStartT,
+			StartedTime:    stageStartTime,
+			FinishedAt:     stageFinishedT,
+			FinishedTime:   stageFinishedTime,
+			TotalStageTime: stageTotalBuildTime,
+			Machine:        fetchOsEnvStr(EnvDroneStageMachine, mockEnvDroneStageMachine),
+			Os:             fetchOsEnvStr(EnvDroneStageOs, mockEnvDroneStageOs),
+			Arch:           fetchOsEnvStr(EnvDroneStageArch, mockEnvDroneStageArch),
+			Variant:        fetchOsEnvStr(EnvDroneStageVariant, mockEnvDroneStageVariant),
+			Type:           fetchOsEnvStr(EnvDroneStageType, mockEnvDroneStageType),
+			Kind:           fetchOsEnvStr(EnvDroneStageKind, mockEnvDroneStageKind),
+			Name:           fetchOsEnvStr(EnvDroneStageName, mockEnvDroneStageName),
 		},
 		DroneSystem: DroneSystem{
 			Version:          fetchOsEnvStr(EnvDroneSystemVersion, mockEnvDroneSystemVersion),

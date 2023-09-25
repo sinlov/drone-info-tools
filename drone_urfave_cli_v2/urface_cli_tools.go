@@ -2,6 +2,7 @@ package drone_urfave_cli_v2
 
 import (
 	"github.com/sinlov/drone-info-tools/drone_info"
+	"github.com/sinlov/drone-info-tools/tools/date_kit"
 	"github.com/urfave/cli/v2"
 	"net/url"
 	"time"
@@ -298,10 +299,22 @@ func UrfaveCliBindDroneInfo(c *cli.Context) drone_info.Drone {
 		repoHost = parse.Host
 		repoHostName = parse.Hostname()
 	}
+
+	buildCreateAt := c.Uint64("build.created")
+	buildCreateAtT := time.Unix(int64(buildCreateAt), 0).In(time.Local).Format(drone_info.DroneTimeFormatDefault)
+	buildStartAt := c.Uint64("build.started")
+	buildStartAtT := time.Unix(int64(buildStartAt), 0).In(time.Local).Format(drone_info.DroneTimeFormatDefault)
+	buildFinishAt := c.Uint64("build.finished")
+	buildFinishAtT := time.Unix(int64(buildFinishAt), 0).In(time.Local).Format(drone_info.DroneTimeFormatDefault)
+
+	buildTotalBuildTimeStr := date_kit.DistanceBetweenTimestampSecondHuman(int64(buildCreateAt), int64(buildFinishAt))
+
 	stageStartT := c.Uint64("stage.started")
 	stageStartTime := time.Unix(int64(stageStartT), 0).In(time.Local).Format(drone_info.DroneTimeFormatDefault)
 	stageFinishedT := c.Uint64("stage.finished")
 	stageFinishedTime := time.Unix(int64(stageStartT), 0).In(time.Local).Format(drone_info.DroneTimeFormatDefault)
+	stageTotalBuildTime := date_kit.DistanceBetweenTimestampSecondHuman(int64(stageStartT), int64(stageFinishedT))
+
 	var drone = drone_info.Drone{
 		//  repo info
 		Repo: drone_info.Repo{
@@ -319,26 +332,30 @@ func UrfaveCliBindDroneInfo(c *cli.Context) drone_info.Drone {
 		},
 		//  drone_info.Build
 		Build: drone_info.Build{
-			WorkSpace:    c.String("build.workspace"),
-			BuildDebug:   c.Bool(drone_info.NameCliStepsDebug),
-			Trigger:      c.String("build.trigger"),
-			Status:       c.String("build.status"),
-			Number:       c.Uint64("build.number"),
-			Tag:          c.String("build.tag"),
-			Branch:       c.String("build.branch"),
-			RepoBranch:   c.String("build.repo_branch"),
-			SourceBranch: c.String("build.source_branch"),
-			TargetBranch: c.String("build.target_branch"),
-			Link:         c.String("build.link"),
-			Event:        c.String("build.event"),
-			CreatedAt:    c.Uint64("build.created"),
-			StartAt:      c.Uint64("build.started"),
-			FinishedAt:   c.Uint64("build.finished"),
-			PR:           c.String("pull.request"),
-			PRAction:     c.String("build.pr_action"),
-			DeployTo:     c.String("deploy.to"),
-			FailedStages: c.String("failed.stages"),
-			FailedSteps:  c.String("failed.steps"),
+			WorkSpace:      c.String("build.workspace"),
+			BuildDebug:     c.Bool(drone_info.NameCliStepsDebug),
+			Trigger:        c.String("build.trigger"),
+			Status:         c.String("build.status"),
+			Number:         c.Uint64("build.number"),
+			Tag:            c.String("build.tag"),
+			Branch:         c.String("build.branch"),
+			RepoBranch:     c.String("build.repo_branch"),
+			SourceBranch:   c.String("build.source_branch"),
+			TargetBranch:   c.String("build.target_branch"),
+			Link:           c.String("build.link"),
+			Event:          c.String("build.event"),
+			CreatedAt:      buildCreateAt,
+			CreatedAtT:     buildCreateAtT,
+			StartAt:        buildStartAt,
+			StartAtT:       buildStartAtT,
+			FinishedAt:     buildFinishAt,
+			FinishedAtT:    buildFinishAtT,
+			TotalBuildTime: buildTotalBuildTimeStr,
+			PR:             c.String("pull.request"),
+			PRAction:       c.String("build.pr_action"),
+			DeployTo:       c.String("deploy.to"),
+			FailedStages:   c.String("failed.stages"),
+			FailedSteps:    c.String("failed.steps"),
 		},
 		Commit: drone_info.Commit{
 			Link:    c.String("commit.link"),
@@ -354,17 +371,18 @@ func UrfaveCliBindDroneInfo(c *cli.Context) drone_info.Drone {
 			},
 		},
 		Stage: drone_info.Stage{
-			StartedAt:    stageStartT,
-			StartedTime:  stageStartTime,
-			FinishedAt:   stageFinishedT,
-			FinishedTime: stageFinishedTime,
-			Machine:      c.String("stage.machine"),
-			Os:           c.String("stage.os"),
-			Arch:         c.String("stage.arch"),
-			Variant:      c.String("stage.variant"),
-			Type:         c.String("stage.type"),
-			Kind:         c.String("stage.kind"),
-			Name:         c.String("stage.name"),
+			StartedAt:      stageStartT,
+			StartedTime:    stageStartTime,
+			FinishedAt:     stageFinishedT,
+			FinishedTime:   stageFinishedTime,
+			TotalStageTime: stageTotalBuildTime,
+			Machine:        c.String("stage.machine"),
+			Os:             c.String("stage.os"),
+			Arch:           c.String("stage.arch"),
+			Variant:        c.String("stage.variant"),
+			Type:           c.String("stage.type"),
+			Kind:           c.String("stage.kind"),
+			Name:           c.String("stage.name"),
 		},
 		DroneSystem: drone_info.DroneSystem{
 			Version:          c.String("drone.system.version"),
