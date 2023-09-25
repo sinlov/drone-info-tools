@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [convention-change-log](https://github.com/convention-change/convention-change-log) for commit guidelines.
 
+## [1.32.0](https://github.com/sinlov/drone-info-tools/compare/1.31.0...v1.32.0) (2023-09-25)
+
+### ✨ Features
+
+* add drone build time and stage build time at Drone struct ([beac2eec](https://github.com/sinlov/drone-info-tools/commit/beac2eec9c045ef28dbc77d4bc86228d09d0e0fc))
+
 ## [1.31.0](https://github.com/sinlov/drone-info-tools/compare/1.30.0...v1.31.0) (2023-08-07)
 
 ### ✨ Features
