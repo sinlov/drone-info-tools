@@ -7,7 +7,7 @@ require (
 	github.com/aymerick/raymond v2.0.2+incompatible
 	github.com/gookit/color v1.5.4
 	github.com/sebdah/goldie/v2 v2.7.1
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.0
 	github.com/urfave/cli/v2 v2.27.7
 )
 
